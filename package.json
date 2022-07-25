@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "MERN E-Commerce App",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node backend/server",
@@ -22,7 +23,8 @@
   "homepage": "https://github.com/shernille37/E-Commerce#readme",
   "dependencies": {
     "dotenv": "^16.0.1",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "mongoose": "^6.4.7"
   },
   "devDependencies": {
     "concurrently": "^7.3.0",
