@@ -1,0 +1,23 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "MERN E-Commerce App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shernille37/E-Commerce.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shernille37/E-Commerce/issues"
+  },
+  "homepage": "https://github.com/shernille37/E-Commerce#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
