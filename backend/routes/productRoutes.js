@@ -1,7 +1,8 @@
 import express from 'express';
-const router = express.Router();
 import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
+
+const router = express.Router();
 
 // @desc Send all products to Client with JSON format
 // @route GET /api/products
@@ -26,7 +27,8 @@ router.get(
     if (product) {
       res.json(product);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404);
+      throw new Error('Product not Found');
     }
   })
 );
