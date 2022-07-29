@@ -13,12 +13,7 @@ export const cartReducer = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(addToCart.pending, (state, action) => {
-        state.loading = true;
-      })
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.loading = false;
-
         const item = action.payload;
 
         const itemIsExist = state.cartItems.find(
@@ -27,7 +22,7 @@ export const cartReducer = createSlice({
 
         if (itemIsExist) {
           state.cartItems = state.cartItems.map((x) =>
-            x.product === itemIsExist ? item : x
+            x.product === itemIsExist.product ? item : x
           );
         } else {
           state.cartItems = [...state.cartItems, item];
@@ -37,7 +32,6 @@ export const cartReducer = createSlice({
         localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
       })
       .addCase(addToCart.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload;
       });
   },
