@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import productReducers from './reducers/productReducers';
+import { productsSlice, productDetailsSlice } from './reducers/productReducers';
 
 export default configureStore({
   reducer: {
-    productList: productReducers,
+    productList: productsSlice,
+    productDetails: productDetailsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,16 +1,19 @@
-import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
-import { listProducts } from '../actions/productActions';
+import { listProducts, listProductDetails } from '../actions/productActions';
 
-const initialState = {
+const productsInitialState = {
   products: [],
-  loading: null,
-  error: null,
 };
 
-const productsSlice = createSlice({
+const productDetailsInitialState = {
+  product: {
+    reviews: [],
+  },
+};
+
+export const productsSlice = createSlice({
   name: 'products',
-  initialState,
+  initialState: productsInitialState,
   reducers: {},
   extraReducers(builder) {
     builder
@@ -26,9 +29,24 @@ const productsSlice = createSlice({
         state.error = action.payload;
       });
   },
-});
+}).reducer;
 
-export const { productRequest, productSuccess, productFail } =
-  productsSlice.actions;
-
-export default productsSlice.reducer;
+export const productDetailsSlice = createSlice({
+  name: 'productDetails',
+  initialState: productDetailsInitialState,
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(listProductDetails.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(listProductDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.product = action.payload;
+      })
+      .addCase(listProductDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+}).reducer;
