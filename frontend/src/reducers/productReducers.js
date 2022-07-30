@@ -39,6 +39,7 @@ export const productDetailsSlice = createSlice({
     builder
       .addCase(listProductDetails.pending, (state, action) => {
         state.loading = true;
+        state = productDetailsInitialState;
       })
       .addCase(listProductDetails.fulfilled, (state, action) => {
         state.loading = false;

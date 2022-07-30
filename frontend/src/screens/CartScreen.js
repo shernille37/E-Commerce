@@ -17,6 +17,7 @@ import {
 } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../actions/cartActions';
+import { removeFromCart } from '../reducers/cartReducers';
 
 const CartScreen = () => {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const CartScreen = () => {
   }, [dispatch, params, qty]);
 
   const removeFromCartHandler = (id) => {
-    // dispatch(removeFromCart(id))
+    dispatch(removeFromCart(id));
   };
 
   const checkoutHandler = () => {
@@ -55,7 +56,11 @@ const CartScreen = () => {
         <h1>Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
-            Your cart is empty <Link to='/'>Go Back</Link>
+            Your cart is empty{' '}
+            <Link to='/'>
+              {' '}
+              <span style={{ textDecoration: 'underline' }}>Go Back</span>
+            </Link>
           </Message>
         ) : (
           <ListGroup variant='flush'>

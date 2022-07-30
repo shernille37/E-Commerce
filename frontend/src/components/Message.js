@@ -8,7 +8,6 @@ const Message = ({ variant, children }) => {
       variant={variant}
       style={{ textAlign: 'center' }}
     >
-      <Alert.Heading as='h2'>Error</Alert.Heading>
       <h4>{children}</h4>
     </Alert>
   );
