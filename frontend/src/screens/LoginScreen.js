@@ -4,7 +4,6 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
-import Loader from '../components/Loader';
 import { login } from '../actions/userActions';
 
 const LoginScreen = () => {
@@ -36,7 +35,7 @@ const LoginScreen = () => {
     <FormContainer>
       <h1>Sign In</h1>
       {error && <Message variant='danger'>{error}</Message>}
-      {loading && <Loader />}
+      {loading && <Message>Loggin In...</Message>}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='email'>
           <Form.Label>Email Address</Form.Label>
