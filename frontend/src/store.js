@@ -8,7 +8,7 @@ export default configureStore({
     productList: productsSlice,
     productDetails: productDetailsSlice,
     cart: cartSlice,
-    userLogin: userLoginSlice,
+    user: userLoginSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

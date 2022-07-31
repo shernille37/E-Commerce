@@ -22,6 +22,7 @@ const userLoginReducer = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = null;
         state.user = action.payload;
 
         // Set User to Local Storage

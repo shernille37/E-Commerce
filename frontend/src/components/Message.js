@@ -3,12 +3,8 @@ import { Alert } from 'react-bootstrap';
 
 const Message = ({ variant, children }) => {
   return (
-    <Alert
-      className='rounded'
-      variant={variant}
-      style={{ textAlign: 'center' }}
-    >
-      <h4>{children}</h4>
+    <Alert className='rounded text-center' variant={variant}>
+      {children}
     </Alert>
   );
 };
