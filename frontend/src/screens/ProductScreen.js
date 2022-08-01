@@ -14,6 +14,7 @@ import {
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import ZoomImage from '../components/ZoomImage';
 
 const ProductScreen = () => {
   const [qty, setQty] = useState(1);
@@ -52,7 +53,7 @@ const ProductScreen = () => {
         <>
           <Row>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
+              <ZoomImage img={product.image} alt={product.name} />
             </Col>
 
             <Col md={3}>
