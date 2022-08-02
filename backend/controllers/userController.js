@@ -78,4 +78,38 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, registerUser, getUserProfile };
+// @desc Update USER profile
+// @route PUT /api/users/profile
+// @access PRIVATE
+
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    const { name, email, password } = req.body;
+
+    // If user sent an email and email is already in the Database
+    if (email && (await User.findOne({ email }))) {
+      res.status(400); // Bad Request
+      throw new Error('Email already exists');
+    }
+
+    if (email) user.email = email;
+    if (name) user.name = name;
+    if (password) user.password = password;
+
+    await user.save();
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found!');
+  }
+});
+
+export { authUser, registerUser, getUserProfile, updateUserProfile };
