@@ -14,7 +14,7 @@ const userReducer = createSlice({
   reducers: {
     logout: (state, action) => {
       state.user = null;
-
+      state.userDetails = null;
       localStorage.removeItem('user');
     },
   },
