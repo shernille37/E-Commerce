@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, register } from '../actions/userActions';
+import { getProfile, login, register } from '../actions/userActions';
 
 const userInitialState = {
   user: localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user'))
     : null,
+  userDetails: null,
 };
 
 const userReducer = createSlice({
@@ -19,6 +20,7 @@ const userReducer = createSlice({
   },
   extraReducers(builder) {
     builder
+      // --- LOGIN ---
       .addCase(login.pending, (state, action) => {
         state.loading = true;
       })
@@ -36,6 +38,8 @@ const userReducer = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      // -- REGISTER --
       .addCase(register.pending, (state, action) => {
         state.loading = true;
       })
@@ -48,6 +52,20 @@ const userReducer = createSlice({
         localStorage.setItem('user', JSON.stringify(state.user));
       })
       .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // -- GET PROFILE
+      .addCase(getProfile.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.userDetails = action.payload;
+      })
+      .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
