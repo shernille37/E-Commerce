@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login } from '../actions/userActions';
+import { login, register } from '../actions/userActions';
 
-const initialState = {
+const userInitialState = {
   user: localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user'))
     : null,
 };
 
-const userLoginReducer = createSlice({
+const userReducer = createSlice({
   name: 'user',
-  initialState,
+  initialState: userInitialState,
   reducers: {
     logout: (state, action) => {
       state.user = null;
@@ -35,9 +35,24 @@ const userLoginReducer = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(register.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload;
+
+        // Set User to Local Storage
+        localStorage.setItem('user', JSON.stringify(state.user));
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const userLoginSlice = userLoginReducer.reducer;
-export const { logout } = userLoginReducer.actions;
+export const userSlice = userReducer.reducer;
+export const { logout } = userReducer.actions;
