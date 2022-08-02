@@ -25,22 +25,12 @@ const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
-  const params = useParams();
   const navigate = useNavigate();
 
-  const productId = params.id;
-  const [qty, setQty] = useSearchParams();
-
-  useEffect(() => {
-    if (productId) {
-      dispatch(
-        addToCart({
-          id: productId,
-          qty: Number(qty.get('qty')),
-        })
-      );
-    }
-  }, [dispatch, params, qty]);
+  const addToCartHandler = (id, qty) => {
+    dispatch(addToCart({ id, qty }));
+    navigate(`/cart`);
+  };
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
@@ -79,12 +69,7 @@ const CartScreen = () => {
                       as='select'
                       value={item.qty}
                       onChange={(e) =>
-                        dispatch(
-                          addToCart({
-                            id: item.product,
-                            qty: Number(e.target.value),
-                          })
-                        )
+                        addToCartHandler(item.product, Number(e.target.value))
                       }
                     >
                       {[...Array(item.countInStock).keys()].map((x) => (
