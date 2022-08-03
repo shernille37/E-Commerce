@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getProfile, login, register } from '../actions/userActions';
+import {
+  getProfile,
+  login,
+  register,
+  updateProfile,
+} from '../actions/userActions';
 
 const userInitialState = {
   user: localStorage.getItem('user')
@@ -66,6 +71,21 @@ const userReducer = createSlice({
         state.userDetails = action.payload;
       })
       .addCase(getProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // -- UPDATE PROFILE
+      .addCase(updateProfile.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.success = true;
+        state.userDetails = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,8 +7,8 @@ import { logout } from '../reducers/userReducers';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user);
-  const { user } = userInfo;
+  const user = useSelector((state) => state.user.user);
+  const userDetails = useSelector((state) => state.user.userDetails);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -32,8 +32,8 @@ const Header = () => {
               </Nav.Link>
             </LinkContainer>
 
-            {user ? (
-              <NavDropdown title={user.name} id='username'>
+            {user && userDetails ? (
+              <NavDropdown title={userDetails.name} id='username'>
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>Profile</NavDropdown.Item>
                 </LinkContainer>

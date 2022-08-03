@@ -5,15 +5,18 @@ import Loader from '../components/Loader';
 import Product from '../components/Product';
 import { useSelector, useDispatch } from 'react-redux';
 import { listProducts } from '../actions/productActions';
+import { getProfile } from '../actions/userActions';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
+  const user = useSelector((state) => state.user.user);
   const { loading, error, products } = productList;
 
   useEffect(() => {
     dispatch(listProducts());
-  }, [dispatch]);
+    if (user) dispatch(getProfile());
+  }, [dispatch, user]);
   return (
     <>
       <h1>Latest Products</h1>

@@ -1,41 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
-import { getProfile } from '../actions/userActions';
+import { getProfile, updateProfile } from '../actions/userActions';
 
 const ProfileScreen = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const userInfo = useSelector((state) => state.user);
+  const { user, userDetails, error, success } = userInfo;
+
+  const [name, setName] = useState(userDetails.name);
+  const [email, setEmail] = useState(userDetails.email);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
-  const [search, setSearch] = useSearchParams();
   const navigate = useNavigate();
-
-  const userInfo = useSelector((state) => state.user);
-  const { user, userDetails, loading, error } = userInfo;
 
   useEffect(() => {
     if (!user) {
       navigate('/login');
-    } else if (!userDetails) {
-      dispatch(getProfile());
-    } else {
-      setName(userDetails.name);
-      setEmail(userDetails.email);
     }
-  }, [navigate, dispatch, user, userDetails]);
+  }, [navigate, dispatch, user]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
     } else {
-      // DISPATCH UPDATE PROFILE
+      dispatch(updateProfile({ name, email, password }));
     }
   };
 
@@ -45,7 +39,7 @@ const ProfileScreen = () => {
         <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
-        {loading && <Message>Signing In...</Message>}
+        {success && <Message variant='success'>Profile Updated</Message>}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>
             <Form.Label>Name</Form.Label>

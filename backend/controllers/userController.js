@@ -89,12 +89,15 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
 
     // If user sent an email and email is already in the Database
-    if (email && (await User.findOne({ email }))) {
-      res.status(400); // Bad Request
-      throw new Error('Email already exists');
+    if (email && email !== user.email) {
+      if (await User.findOne({ email })) {
+        res.status(400); // Bad Request
+        throw new Error('Email already exists');
+      } else {
+        user.email = email;
+      }
     }
 
-    if (email) user.email = email;
     if (name) user.name = name;
     if (password) user.password = password;
 

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  useSearchParams,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +18,7 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const userInfo = useSelector((state) => state.user);
   const { user, loading, error } = userInfo;
@@ -27,7 +33,6 @@ const LoginScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     dispatch(login({ email, password }));
   };
 
