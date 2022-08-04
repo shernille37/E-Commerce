@@ -9,8 +9,8 @@ const ProfileScreen = () => {
   const userInfo = useSelector((state) => state.user);
   const { user, userDetails, error, success } = userInfo;
 
-  const [name, setName] = useState(userDetails.name);
-  const [email, setEmail] = useState(userDetails.email);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState(null);
@@ -21,6 +21,9 @@ const ProfileScreen = () => {
   useEffect(() => {
     if (!user) {
       navigate('/login');
+    } else if (userDetails) {
+      setName(userDetails.name);
+      setEmail(userDetails.email);
     }
   }, [navigate, dispatch, user]);
 
