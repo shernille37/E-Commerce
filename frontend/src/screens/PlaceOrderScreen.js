@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { calculatePrices } from '../reducers/cartReducers';
+import { createOrder } from '../actions/orderActions';
 import LoginScreen from '../screens/LoginScreen';
 
 const PlaceOrderScreen = () => {
@@ -22,20 +23,37 @@ const PlaceOrderScreen = () => {
     totalPrice,
   } = cart;
 
+  const order = useSelector((state) => state.order);
+  const { order: createdOrder, success, error } = order;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!paymentMethod || !shippingAddress) {
       navigate('/payment');
+    } else if (success) {
+      navigate(`/order/${createdOrder._id}`);
     }
 
     dispatch(calculatePrices());
-  }, [dispatch, paymentMethod, shippingAddress]);
+  }, [dispatch, paymentMethod, shippingAddress, success]);
 
   const placeOrderHandler = () => {
-    console.log('Order');
+    dispatch(
+      createOrder({
+        orderItems: cartItems,
+        shippingAddress,
+        paymentMethod,
+        itemsPrice,
+        shippingPrice,
+        taxPrice,
+        totalPrice,
+      })
+    );
   };
+
+  if (createdOrder) console.log(createdOrder);
 
   return (
     <>

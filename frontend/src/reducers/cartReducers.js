@@ -17,7 +17,7 @@ const initialState = {
   totalPrice: 0,
 };
 
-export const cartReducer = createSlice({
+const cartReducer = createSlice({
   name: 'cart',
   initialState,
   reducers: {

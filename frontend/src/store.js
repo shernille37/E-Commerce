@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { productsSlice, productDetailsSlice } from './reducers/productReducers';
 import { cartSlice } from './reducers/cartReducers';
 import { userSlice } from './reducers/userReducers';
+import { orderSlice } from './reducers/orderReducers';
 
 export default configureStore({
   reducer: {
@@ -9,6 +10,7 @@ export default configureStore({
     productDetails: productDetailsSlice,
     cart: cartSlice,
     user: userSlice,
+    order: orderSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
