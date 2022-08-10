@@ -20,16 +20,16 @@ const LoginScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const userInfo = useSelector((state) => state.user);
-  const { user, loading, error } = userInfo;
+  const user = useSelector((state) => state.user);
+  const { authUser, loading, error } = user;
 
   const redirect = search.get('redirect') ? search.get('redirect') : '/';
 
   useEffect(() => {
-    if (user) {
+    if (authUser) {
       navigate(redirect);
     }
-  }, [navigate, user, redirect]);
+  }, [navigate, authUser, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();

@@ -7,7 +7,8 @@ import { logout } from '../reducers/userReducers';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user);
+  const { authUser } = user;
   const userDetails = useSelector((state) => state.user.userDetails);
 
   const logoutHandler = () => {
@@ -32,7 +33,7 @@ const Header = () => {
               </Nav.Link>
             </LinkContainer>
 
-            {user && userDetails ? (
+            {authUser && userDetails ? (
               <NavDropdown title={userDetails.name} id='username'>
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>Profile</NavDropdown.Item>

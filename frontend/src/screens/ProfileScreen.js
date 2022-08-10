@@ -6,8 +6,8 @@ import Message from '../components/Message';
 import { getProfile, updateProfile } from '../actions/userActions';
 
 const ProfileScreen = () => {
-  const userInfo = useSelector((state) => state.user);
-  const { user, userDetails, error, success } = userInfo;
+  const user = useSelector((state) => state.user);
+  const { authUser, userDetails, error, success } = user;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,13 +19,15 @@ const ProfileScreen = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else if (userDetails) {
+    if (!authUser) {
+      navigate('/login?redirect=/profile');
+    } else if (!userDetails) {
+      dispatch(getProfile());
+    } else {
       setName(userDetails.name);
       setEmail(userDetails.email);
     }
-  }, [navigate, dispatch, user]);
+  }, [navigate, dispatch, authUser, userDetails]);
 
   const submitHandler = (e) => {
     e.preventDefault();

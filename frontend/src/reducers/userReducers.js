@@ -7,7 +7,7 @@ import {
 } from '../actions/userActions';
 
 const userInitialState = {
-  user: localStorage.getItem('user')
+  authUser: localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user'))
     : null,
   userDetails: null,
@@ -18,7 +18,7 @@ const userReducer = createSlice({
   initialState: userInitialState,
   reducers: {
     logout: (state, action) => {
-      state.user = null;
+      state.authUser = null;
       state.userDetails = null;
       localStorage.removeItem('user');
     },
@@ -32,10 +32,10 @@ const userReducer = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.user = action.payload;
+        state.authUser = action.payload;
 
         // Set User to Local Storage
-        localStorage.setItem('user', JSON.stringify(state.user));
+        localStorage.setItem('user', JSON.stringify(state.authUser));
 
         // TODO: Encrypt data in local storage
       })
@@ -51,10 +51,10 @@ const userReducer = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.user = action.payload;
+        state.authUser = action.payload;
 
         // Set User to Local Storage
-        localStorage.setItem('user', JSON.stringify(state.user));
+        localStorage.setItem('user', JSON.stringify(state.authUser));
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;

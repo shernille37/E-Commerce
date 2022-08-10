@@ -10,13 +10,16 @@ import { getProfile } from '../actions/userActions';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user);
+  const { userDetails, authUser } = user;
   const { loading, error, products } = productList;
 
   useEffect(() => {
+    if (authUser && !userDetails) {
+      dispatch(getProfile());
+    }
     dispatch(listProducts());
-    if (user) dispatch(getProfile());
-  }, [dispatch, user]);
+  }, [dispatch, userDetails]);
   return (
     <>
       <h1>Latest Products</h1>
