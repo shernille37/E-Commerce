@@ -19,7 +19,7 @@ const OrderScreen = () => {
   const orderID = params.id;
 
   useEffect(() => {
-    dispatch(getOrderDetails(orderID));
+    if (!orderDetails) dispatch(getOrderDetails(orderID));
     if (!authUser) {
       navigate('/login');
     }
