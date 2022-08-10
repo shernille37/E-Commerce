@@ -3,12 +3,14 @@ import { listProducts, listProductDetails } from '../actions/productActions';
 
 const productsInitialState = {
   products: [],
+  loading: true,
 };
 
 const productDetailsInitialState = {
   product: {
     reviews: [],
   },
+  loading: true,
 };
 
 export const productsSlice = createSlice({
