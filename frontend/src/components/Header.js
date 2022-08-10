@@ -2,14 +2,19 @@ import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { logout } from '../reducers/userReducers';
+import { getProfile } from '../actions/userActions';
 
 const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const { authUser } = user;
-  const userDetails = useSelector((state) => state.user.userDetails);
+  const { authUser, userDetails } = user;
+
+  useEffect(() => {
+    if (authUser && !userDetails) {
+      dispatch(getProfile());
+    }
+  }, [authUser, userDetails]);
 
   const logoutHandler = () => {
     dispatch(logout());

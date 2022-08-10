@@ -5,6 +5,9 @@ const initialState = {
   cartItems: localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
     : [],
+  shippingAddress: localStorage.getItem('shippingAddress')
+    ? JSON.parse(localStorage.getItem('shippingAddress'))
+    : null,
 };
 
 export const cartReducer = createSlice({
@@ -18,6 +21,11 @@ export const cartReducer = createSlice({
 
       // Update LocalStorage
       localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+    },
+
+    saveShippingAddress: (state, action) => {
+      state.shippingAddress = action.payload;
+      localStorage.setItem('shippingAddress', JSON.stringify(action.payload));
     },
   },
   extraReducers(builder) {
@@ -48,4 +56,4 @@ export const cartReducer = createSlice({
 
 export const cartSlice = cartReducer.reducer;
 
-export const { removeFromCart } = cartReducer.actions;
+export const { removeFromCart, saveShippingAddress } = cartReducer.actions;
