@@ -11,6 +11,10 @@ const initialState = {
   paymentMethod: localStorage.getItem('paymentMethod')
     ? JSON.parse(localStorage.getItem('paymentMethod'))
     : null,
+  itemsPrice: 0,
+  shippingPrice: 0,
+  taxPrice: 0,
+  totalPrice: 0,
 };
 
 export const cartReducer = createSlice({
@@ -34,6 +38,25 @@ export const cartReducer = createSlice({
     savePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
       localStorage.setItem('paymentMethod', JSON.stringify(action.payload));
+    },
+
+    calculatePrices: (state, action) => {
+      const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2);
+
+      state.itemsPrice = addDecimals(
+        state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+      );
+
+      state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 100);
+
+      state.taxPrice = addDecimals(
+        Number((0.15 * state.itemsPrice).toFixed(2))
+      );
+      state.totalPrice = addDecimals(
+        Number(state.itemsPrice) +
+          Number(state.shippingPrice) +
+          Number(state.taxPrice)
+      );
     },
   },
   extraReducers(builder) {
@@ -64,5 +87,9 @@ export const cartReducer = createSlice({
 
 export const cartSlice = cartReducer.reducer;
 
-export const { removeFromCart, saveShippingAddress, savePaymentMethod } =
-  cartReducer.actions;
+export const {
+  removeFromCart,
+  saveShippingAddress,
+  savePaymentMethod,
+  calculatePrices,
+} = cartReducer.actions;
