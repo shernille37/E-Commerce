@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import Message from '../components/Message';
+import { Link } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +11,8 @@ import LoginScreen from '../screens/LoginScreen';
 
 const ShippingScreen = () => {
   const authUser = useSelector((state) => state.user.authUser);
-  const shippingAddress = useSelector((state) => state.cart.shippingAddress);
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress, paymentMethod, cartItems } = cart;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,10 +50,22 @@ const ShippingScreen = () => {
         <>
           <CheckoutSteps step1 /> <LoginScreen />
         </>
+      ) : cartItems.length === 0 ? (
+        <Message>
+          Your cart is empty{' '}
+          <Link to='/'>
+            {' '}
+            <span style={{ textDecoration: 'underline' }}>Go Back</span>
+          </Link>
+        </Message>
       ) : (
         <>
           <FormContainer>
-            <CheckoutSteps step2 />
+            <CheckoutSteps
+              step2
+              step3={shippingAddress ? true : false}
+              step4={paymentMethod ? true : false}
+            />
             <h1>Shipping</h1>
             <Form onSubmit={submitHandler}>
               <Form.Group controlId='address'>
