@@ -11,7 +11,6 @@ const userInitialState = {
     ? JSON.parse(localStorage.getItem('user'))
     : null,
   userDetails: null,
-  loading: true,
 };
 
 const userReducer = createSlice({
