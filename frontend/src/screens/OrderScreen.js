@@ -19,7 +19,8 @@ const OrderScreen = () => {
   const orderID = params.id;
 
   useEffect(() => {
-    if (!orderDetails) dispatch(getOrderDetails(orderID));
+    if (!orderDetails || orderDetails._id !== orderID)
+      dispatch(getOrderDetails(orderID));
     if (!authUser) {
       navigate('/login');
     }
@@ -55,12 +56,29 @@ const OrderScreen = () => {
                   <p>{orderDetails.shippingAddress.city}</p>
                   <p>{orderDetails.shippingAddress.postalCode}</p>
                   <p>{orderDetails.shippingAddress.country}</p>
+
+                  {orderDetails.isDelivered ? (
+                    <Message variant={'success'}>
+                      Delivered on {orderDetails.deliveredAt}
+                    </Message>
+                  ) : (
+                    <Message variant={'danger'}>Not Delivered</Message>
+                  )}
                 </ListGroup.Item>
 
                 <ListGroup.Item>
                   <h2>Payment Method</h2>
-                  <h5>Method: </h5>
-                  <p>{orderDetails.paymentInfo.paymentMethod}</p>
+                  <div>
+                    <h5>Method: </h5>
+                    <p>{orderDetails.paymentInfo.paymentMethod}</p>
+                  </div>
+                  {orderDetails.isPaid ? (
+                    <Message variant={'success'}>
+                      Paid on {orderDetails.paidAt}
+                    </Message>
+                  ) : (
+                    <Message variant={'danger'}>Not Paid</Message>
+                  )}
                 </ListGroup.Item>
 
                 <ListGroup.Item>
