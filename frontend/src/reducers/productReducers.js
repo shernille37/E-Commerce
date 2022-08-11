@@ -10,6 +10,7 @@ const productDetailsInitialState = {
   product: {
     reviews: [],
   },
+  loading: true,
 };
 
 export const productsSlice = createSlice({
