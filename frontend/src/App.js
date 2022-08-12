@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { Container } from 'react-bootstrap';
 
 import Header from './components/Header';
@@ -17,28 +19,50 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 
 function App() {
+  const [clientID, setClientID] = useState(null);
+
+  useEffect(() => {
+    const getClientId = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal');
+
+      setClientID(clientId);
+    };
+    getClientId();
+  }, []);
+
   return (
-    <Router>
-      <Header />
-      <main className='py-3'>
-        <Container>
-          <Routes>
-            <Route path='*' element={<NotFound />} />
-            <Route path='/' element={<HomeScreen />} />
-            <Route path='/product/:id' element={<ProductScreen />} />
-            <Route path='/register' element={<RegisterScreen />} />
-            <Route path='/login' element={<LoginScreen />} />
-            <Route path='/profile' element={<ProfileScreen />} />
-            <Route path='/cart' element={<CartScreen />} />
-            <Route path='/shipping' element={<ShippingScreen />} />
-            <Route path='/payment' element={<PaymentScreen />} />
-            <Route path='/placeorder' element={<PlaceOrderScreen />} />
-            <Route path='/order/:id' element={<OrderScreen />} />
-          </Routes>
-        </Container>
-      </main>
-      <Footer />
-    </Router>
+    clientID && (
+      <PayPalScriptProvider
+        deferLoading={true}
+        options={{
+          'client-id': clientID,
+          components: 'buttons',
+          currency: 'EUR',
+        }}
+      >
+        <Router>
+          <Header />
+          <main className='py-3'>
+            <Container>
+              <Routes>
+                <Route path='*' element={<NotFound />} />
+                <Route path='/' element={<HomeScreen />} />
+                <Route path='/product/:id' element={<ProductScreen />} />
+                <Route path='/register' element={<RegisterScreen />} />
+                <Route path='/login' element={<LoginScreen />} />
+                <Route path='/profile' element={<ProfileScreen />} />
+                <Route path='/cart' element={<CartScreen />} />
+                <Route path='/shipping' element={<ShippingScreen />} />
+                <Route path='/payment' element={<PaymentScreen />} />
+                <Route path='/placeorder' element={<PlaceOrderScreen />} />
+                <Route path='/order/:id' element={<OrderScreen />} />
+              </Routes>
+            </Container>
+          </main>
+          <Footer />
+        </Router>
+      </PayPalScriptProvider>
+    )
   );
 }
 

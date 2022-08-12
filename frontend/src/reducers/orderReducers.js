@@ -15,20 +15,22 @@ const orderReducer = createSlice({
   initialState,
   reducers: {
     resetPay: (state, action) => {
-      state.success = false;
+      state.successPayment = false;
     },
   },
   extraReducers(builder) {
     builder
       .addCase(createOrder.pending, (state, action) => {
+        state.successOrder = false;
         state.loading = true;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true;
+        state.successOrder = true;
         state.order = action.payload;
       })
       .addCase(createOrder.rejected, (state, action) => {
+        state.successOrder = false;
         state.loading = false;
         state.error = action.payload;
       })
@@ -44,11 +46,12 @@ const orderReducer = createSlice({
         state.error = action.payload;
       })
       .addCase(payOrder.pending, (state, action) => {
+        state.successPayment = false;
         state.loading = true;
       })
       .addCase(payOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true;
+        state.successPayment = true;
       })
       .addCase(payOrder.rejected, (state, action) => {
         state.loading = false;

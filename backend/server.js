@@ -32,6 +32,11 @@ app.use('/api/users', userRoutes);
 // Order Routes
 app.use('/api/orders', orderRoutes);
 
+// PAYPAL
+app.get('/api/config/paypal', (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+);
+
 //--Middlewares--
 
 // Not Found Error

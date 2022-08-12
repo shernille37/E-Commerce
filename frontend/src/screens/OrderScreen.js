@@ -1,17 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import PayPalButton from '../components/PayPalButton';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getOrderDetails } from '../actions/orderActions';
+import { getOrderDetails, payOrder } from '../actions/orderActions';
+import { resetPay } from '../reducers/orderReducers';
 
 const OrderScreen = () => {
   const authUser = useSelector((state) => state.user.authUser);
 
   const order = useSelector((state) => state.order);
-  const { order: orderDetails, error, loading } = order;
+  const { order: orderDetails, error, loading, successPayment } = order;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,12 +22,15 @@ const OrderScreen = () => {
   const orderID = params.id;
 
   useEffect(() => {
-    if (!orderDetails || orderDetails._id !== orderID)
-      dispatch(getOrderDetails(orderID));
     if (!authUser) {
       navigate('/login');
     }
-  }, [dispatch, orderID, authUser]);
+
+    if (!orderDetails || successPayment) {
+      dispatch(resetPay());
+      dispatch(getOrderDetails(orderID));
+    }
+  }, [dispatch, orderID, authUser, successPayment, orderDetails]);
 
   return (
     <>
@@ -151,6 +157,17 @@ const OrderScreen = () => {
                       <Col>&euro;{orderDetails.priceInfo.totalPrice}</Col>
                     </Row>
                   </ListGroup.Item>
+
+                  {!orderDetails.isPaid && (
+                    <ListGroup.Item>
+                      {loading && <Loader />}
+
+                      <PayPalButton
+                        currency={'EUR'}
+                        amount={orderDetails.priceInfo.itemsPrice}
+                      />
+                    </ListGroup.Item>
+                  )}
                 </ListGroup>
               </Card>
             </Col>

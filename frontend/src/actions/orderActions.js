@@ -58,7 +58,7 @@ export const getOrderDetails = createAsyncThunk(
 
 export const payOrder = createAsyncThunk(
   '/api/orders/:id/pay',
-  async ({ orderId, paymentResult }, { rejectWithValue }) => {
+  async ({ orderID, paymentResult }, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
       : null;
@@ -72,7 +72,7 @@ export const payOrder = createAsyncThunk(
       };
 
       const { data } = await axios.put(
-        `/api/orders/${orderId}/pay`,
+        `/api/orders/${orderID}/pay`,
         paymentResult,
         config
       );

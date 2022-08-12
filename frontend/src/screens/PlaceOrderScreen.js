@@ -24,7 +24,7 @@ const PlaceOrderScreen = () => {
   } = cart;
 
   const order = useSelector((state) => state.order);
-  const { order: createdOrder, success, error } = order;
+  const { order: createdOrder, successOrder, error } = order;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,12 +32,12 @@ const PlaceOrderScreen = () => {
   useEffect(() => {
     if (!paymentMethod || !shippingAddress) {
       navigate('/payment');
-    } else if (success) {
+    } else if (successOrder) {
       navigate(`/order/${createdOrder._id}`);
     }
 
     dispatch(calculatePrices());
-  }, [dispatch, paymentMethod, shippingAddress, success]);
+  }, [dispatch, paymentMethod, shippingAddress, successOrder]);
 
   const placeOrderHandler = () => {
     dispatch(
