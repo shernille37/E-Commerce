@@ -26,7 +26,7 @@ const RegisterScreen = () => {
     if (authUser) {
       navigate(redirect);
     }
-  }, [navigate, user, redirect]);
+  }, [navigate, authUser, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();

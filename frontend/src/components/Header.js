@@ -14,7 +14,7 @@ const Header = () => {
     if (authUser && !userDetails) {
       dispatch(getProfile());
     }
-  }, [authUser, userDetails]);
+  }, [authUser]);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -38,8 +38,8 @@ const Header = () => {
               </Nav.Link>
             </LinkContainer>
 
-            {authUser && userDetails ? (
-              <NavDropdown title={userDetails.name} id='username'>
+            {authUser ? (
+              <NavDropdown title={authUser.name} id='username'>
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>Profile</NavDropdown.Item>
                 </LinkContainer>
@@ -57,15 +57,15 @@ const Header = () => {
             )}
             {authUser && authUser.isAdmin && (
               <NavDropdown title='Admin' id='adminmenu'>
-                <LinkContainer to='/admin/userList'>
+                <LinkContainer to='/admin/userlist'>
                   <NavDropdown.Item>Users</NavDropdown.Item>
                 </LinkContainer>
 
-                <LinkContainer to='/admin/productList'>
+                <LinkContainer to='/admin/productlist'>
                   <NavDropdown.Item>Products</NavDropdown.Item>
                 </LinkContainer>
 
-                <LinkContainer to='/admin/orderList'>
+                <LinkContainer to='/admin/orderlist'>
                   <NavDropdown.Item>Orders</NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
