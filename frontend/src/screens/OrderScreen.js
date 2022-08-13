@@ -164,7 +164,7 @@ const OrderScreen = () => {
 
                       <PayPalButton
                         currency={'EUR'}
-                        amount={orderDetails.priceInfo.itemsPrice}
+                        amount={orderDetails.priceInfo.totalPrice}
                       />
                     </ListGroup.Item>
                   )}

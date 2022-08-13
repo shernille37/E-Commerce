@@ -20,7 +20,6 @@ const PayPalButton = ({ currency, amount }) => {
   };
 
   useEffect(() => {
-    // Change Currency
     dispatch({
       type: 'resetOptions',
       value: {

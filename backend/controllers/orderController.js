@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
+import dateFormat from 'dateformat';
 
 // @desc Create new order
 // @route POST /api/orders
@@ -65,7 +66,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
   if (order) {
     order.isPaid = true;
-    order.paidAt = Date.now();
+    order.paidAt = dateFormat(Date.now(), 'dddd, mmmm dS, yyyy, h:MM TT');
     order.paymentInfo.paymentResult = {
       id: req.body.id,
       status: req.body.status,
