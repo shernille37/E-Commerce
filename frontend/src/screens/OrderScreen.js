@@ -26,15 +26,15 @@ const OrderScreen = () => {
       navigate('/login');
     }
 
-    if (!orderDetails || successPayment || orderDetails._id !== orderID) {
+    if (successPayment) {
       dispatch(resetPay());
-      dispatch(getOrderDetails(orderID));
     }
-  }, [dispatch, orderID, authUser, successPayment, orderDetails]);
+    dispatch(getOrderDetails(orderID));
+  }, [dispatch, orderID, authUser, successPayment]);
 
   return (
     <>
-      {loading ? (
+      {loading || !orderDetails ? (
         <Loader />
       ) : error ? (
         <Message variant={'danger'}>{error}</Message>

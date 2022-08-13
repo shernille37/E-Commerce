@@ -4,6 +4,7 @@ import {
   login,
   register,
   updateProfile,
+  getAllUsers,
 } from '../actions/userActions';
 
 const userInitialState = {
@@ -11,6 +12,7 @@ const userInitialState = {
     ? JSON.parse(localStorage.getItem('user'))
     : null,
   userDetails: null,
+  userList: [],
 };
 
 const userReducer = createSlice({
@@ -86,6 +88,19 @@ const userReducer = createSlice({
         state.userDetails = action.payload;
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // -- GET ALL USERS EXCLUSIVELY FOR ADMINS
+      .addCase(getAllUsers.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userList = action.payload;
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

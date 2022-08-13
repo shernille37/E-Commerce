@@ -114,3 +114,30 @@ export const updateProfile = createAsyncThunk(
     }
   }
 );
+
+export const getAllUsers = createAsyncThunk(
+  '/api/users',
+  async (id, { rejectWithValue }) => {
+    const { token } = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.get(`/api/users`, config);
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
