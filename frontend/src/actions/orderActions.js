@@ -29,6 +29,33 @@ export const createOrder = createAsyncThunk(
   }
 );
 
+export const getMyOrders = createAsyncThunk(
+  '/api/orders/myorders',
+  async (x, { rejectWithValue }) => {
+    const { token } = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.get(`/api/orders/myorders`, config);
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 export const getOrderDetails = createAsyncThunk(
   '/api/orders/:id',
   async (id, { rejectWithValue }) => {

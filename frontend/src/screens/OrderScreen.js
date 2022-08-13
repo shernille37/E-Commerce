@@ -26,7 +26,7 @@ const OrderScreen = () => {
       navigate('/login');
     }
 
-    if (!orderDetails || successPayment) {
+    if (!orderDetails || successPayment || orderDetails._id !== orderID) {
       dispatch(resetPay());
       dispatch(getOrderDetails(orderID));
     }

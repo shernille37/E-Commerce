@@ -3,11 +3,13 @@ import {
   createOrder,
   getOrderDetails,
   payOrder,
+  getMyOrders,
 } from '../actions/orderActions';
 
 const initialState = {
   order: null,
   loading: true,
+  myOrders: [],
 };
 
 const orderReducer = createSlice({
@@ -54,6 +56,17 @@ const orderReducer = createSlice({
         state.successPayment = true;
       })
       .addCase(payOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getMyOrders.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getMyOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.myOrders = action.payload;
+      })
+      .addCase(getMyOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

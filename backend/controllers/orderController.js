@@ -1,6 +1,5 @@
 import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
-import dateFormat from 'dateformat';
 
 // @desc Create new order
 // @route POST /api/orders
@@ -66,7 +65,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
   if (order) {
     order.isPaid = true;
-    order.paidAt = dateFormat(Date.now(), 'dddd, mmmm dS, yyyy, h:MM TT');
+    order.paidAt = Date.now();
     order.paymentInfo.paymentResult = {
       id: req.body.id,
       status: req.body.status,
@@ -83,4 +82,14 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   }
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid };
+// @desc GET logged in user orders
+// @route GET /api/orders/myorders
+// @access PRIVATE
+
+const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+
+  res.json(orders);
+});
+
+export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };
