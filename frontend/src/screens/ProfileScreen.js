@@ -112,11 +112,17 @@ const ProfileScreen = () => {
         ) : myOrders.length === 0 ? (
           <Message variant='info'>You don't have any orders</Message>
         ) : (
-          <Table striped bordered hover responsive className='table-sm'>
+          <Table
+            striped
+            bordered
+            hover
+            responsive
+            className='table-sm text-center'
+          >
             <thead>
               <tr>
                 <th>ID</th>
-                <th>DATE</th>
+                <th>DATE OF ORDER</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
                 <th>DELIVERED</th>

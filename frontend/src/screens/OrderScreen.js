@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import PayPalButton from '../components/PayPalButton';
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import dateFormat from 'dateformat';
+import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getOrderDetails, payOrder } from '../actions/orderActions';
-import { resetPay } from '../reducers/orderReducers';
 
 const OrderScreen = () => {
   const authUser = useSelector((state) => state.user.authUser);
@@ -61,7 +60,11 @@ const OrderScreen = () => {
 
                   {orderDetails.isDelivered ? (
                     <Message variant={'success'}>
-                      Delivered on {orderDetails.deliveredAt}
+                      Delivered on{' '}
+                      {dateFormat(
+                        orderDetails.deliveredAt,
+                        'dddd, mmm dS, yyyy'
+                      )}
                     </Message>
                   ) : (
                     <Message variant={'danger'}>Not Delivered</Message>
@@ -76,7 +79,8 @@ const OrderScreen = () => {
                   </div>
                   {orderDetails.isPaid ? (
                     <Message variant={'success'}>
-                      Paid on {orderDetails.paidAt}
+                      Paid on{' '}
+                      {dateFormat(orderDetails.paidAt, 'dddd, mmm dS, yyyy')}
                     </Message>
                   ) : (
                     <Message variant={'danger'}>Not Paid</Message>
