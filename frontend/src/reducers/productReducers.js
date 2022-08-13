@@ -20,6 +20,7 @@ export const productsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(listProducts.pending, (state, action) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(listProducts.fulfilled, (state, action) => {
@@ -40,6 +41,7 @@ export const productDetailsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(listProductDetails.pending, (state, action) => {
+        state.error = null;
         state.loading = true;
         state = productDetailsInitialState;
       })

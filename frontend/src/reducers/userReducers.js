@@ -5,6 +5,7 @@ import {
   register,
   updateProfile,
   getAllUsers,
+  deleteUser,
 } from '../actions/userActions';
 
 const userInitialState = {
@@ -29,11 +30,11 @@ const userReducer = createSlice({
     builder
       // --- LOGIN ---
       .addCase(login.pending, (state, action) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
         state.authUser = action.payload;
 
         // Set User to Local Storage
@@ -49,10 +50,10 @@ const userReducer = createSlice({
       // -- REGISTER --
       .addCase(register.pending, (state, action) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
         state.authUser = action.payload;
 
         // Set User to Local Storage
@@ -66,10 +67,10 @@ const userReducer = createSlice({
       // -- GET PROFILE
       .addCase(getProfile.pending, (state, action) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(getProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
         state.userDetails = action.payload;
       })
       .addCase(getProfile.rejected, (state, action) => {
@@ -80,10 +81,10 @@ const userReducer = createSlice({
       // -- UPDATE PROFILE
       .addCase(updateProfile.pending, (state, action) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
         state.success = true;
         state.userDetails = action.payload;
       })
@@ -95,12 +96,27 @@ const userReducer = createSlice({
       // -- GET ALL USERS EXCLUSIVELY FOR ADMINS
       .addCase(getAllUsers.pending, (state, action) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.userList = action.payload;
       })
       .addCase(getAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // DELETE USER
+      .addCase(deleteUser.pending, (state, action) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.deleteSuccess = true;
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

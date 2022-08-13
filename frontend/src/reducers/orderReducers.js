@@ -8,23 +8,21 @@ import {
 
 const initialState = {
   order: null,
-  loading: false,
   myOrders: [],
 };
 
 const orderReducer = createSlice({
   name: 'order',
   initialState,
-  reducers: {
-    resetPay: (state, action) => {
-      state.successPayment = false;
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
+
+      // CREATE ORDER
       .addCase(createOrder.pending, (state, action) => {
         state.successOrder = false;
         state.loading = true;
+        state.error = null;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.loading = false;
@@ -36,8 +34,11 @@ const orderReducer = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      // GET ORDER DETAILS
       .addCase(getOrderDetails.pending, (state, action) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(getOrderDetails.fulfilled, (state, action) => {
         state.loading = false;
@@ -47,7 +48,10 @@ const orderReducer = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      // PAY ORDER
       .addCase(payOrder.pending, (state, action) => {
+        state.error = null;
         state.successPayment = false;
         state.loading = true;
       })
@@ -59,7 +63,10 @@ const orderReducer = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+      // GET MY ORDERS
       .addCase(getMyOrders.pending, (state, action) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(getMyOrders.fulfilled, (state, action) => {
@@ -74,5 +81,3 @@ const orderReducer = createSlice({
 });
 
 export const orderSlice = orderReducer.reducer;
-
-export const { resetPay } = orderReducer.actions;

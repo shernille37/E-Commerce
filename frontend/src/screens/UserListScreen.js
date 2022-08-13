@@ -5,11 +5,11 @@ import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getAllUsers } from '../actions/userActions';
+import { getAllUsers, deleteUser } from '../actions/userActions';
 
 const UserListScreen = () => {
   const user = useSelector((state) => state.user);
-  const { authUser, userList, loading, error } = user;
+  const { authUser, userList, loading, error, deleteSuccess } = user;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,10 +20,12 @@ const UserListScreen = () => {
     } else {
       navigate('/login');
     }
-  }, [dispatch, authUser]);
+  }, [dispatch, authUser, deleteSuccess]);
 
   const deleteHandler = (id) => {
-    console.log(`${id} delete`);
+    if (window.confirm('Are you sure?')) {
+      dispatch(deleteUser(id));
+    }
   };
 
   return (

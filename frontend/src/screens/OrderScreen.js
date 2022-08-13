@@ -25,10 +25,6 @@ const OrderScreen = () => {
     if (!authUser) {
       navigate('/login');
     }
-
-    if (successPayment) {
-      dispatch(resetPay());
-    }
     dispatch(getOrderDetails(orderID));
   }, [dispatch, orderID, authUser, successPayment]);
 
