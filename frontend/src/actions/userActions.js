@@ -56,7 +56,7 @@ export const register = createAsyncThunk(
 );
 
 export const getProfile = createAsyncThunk(
-  '/api/users/getProfile',
+  '/api/users/profile',
   async (id, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -88,7 +88,7 @@ export const getProfile = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   '/api/users/updateProfile',
-  async ({ name, email, password }, { rejectWithValue }) => {
+  async ({ id, name, email, password, isAdmin }, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
       : null;
@@ -102,8 +102,8 @@ export const updateProfile = createAsyncThunk(
       };
 
       const { data } = await axios.put(
-        `/api/users/profile`,
-        { name, email, password },
+        `/api/users/${id ? id : 'profile'}`,
+        { name, email, password, isAdmin },
         config
       );
 

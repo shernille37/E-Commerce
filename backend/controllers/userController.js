@@ -115,15 +115,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Get all USERS
-// @route GET /api/users
-// @access PRIVATE/Admin
-
-const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
-  res.json(users);
-});
-
 // @desc Get user by id
 // @route GET /api/users/:id
 // @access PRIVATE/Admin
@@ -136,6 +127,15 @@ const getUserById = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('User not Found');
   }
+});
+
+// @desc Get all USERS
+// @route GET /api/users
+// @access PRIVATE/Admin
+
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
 });
 
 // @desc Delete User

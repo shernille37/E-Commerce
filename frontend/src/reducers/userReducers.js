@@ -25,6 +25,9 @@ const userReducer = createSlice({
       state.userDetails = null;
       localStorage.removeItem('user');
     },
+    resetUpdateSuccess: (state, action) => {
+      state.successUpdate = false;
+    },
   },
   extraReducers(builder) {
     builder
@@ -80,13 +83,19 @@ const userReducer = createSlice({
 
       // -- UPDATE PROFILE
       .addCase(updateProfile.pending, (state, action) => {
+        state.userDetails = null;
         state.loading = true;
         state.error = null;
+        state.successUpdate = false;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
+        const { name, email } = action.payload;
         state.loading = false;
-        state.success = true;
+        state.successUpdate = true;
         state.userDetails = action.payload;
+        // If the one updating is the logged in user then update the auth User
+        if (state.authUser._id === action.payload._id)
+          state.authUser = { ...state.authUser, name, email };
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
@@ -124,4 +133,4 @@ const userReducer = createSlice({
 });
 
 export const userSlice = userReducer.reducer;
-export const { logout } = userReducer.actions;
+export const { logout, resetUpdateSuccess } = userReducer.actions;

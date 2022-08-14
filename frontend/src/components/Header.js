@@ -8,13 +8,7 @@ import { getProfile } from '../actions/userActions';
 const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const { authUser, userDetails } = user;
-
-  useEffect(() => {
-    if (authUser && !userDetails) {
-      dispatch(getProfile());
-    }
-  }, [authUser]);
+  const { authUser } = user;
 
   const logoutHandler = () => {
     dispatch(logout());

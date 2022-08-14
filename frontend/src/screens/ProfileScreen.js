@@ -7,11 +7,12 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import dateFormat from 'dateformat';
 import { getProfile, updateProfile } from '../actions/userActions';
+import { resetUpdateSuccess } from '../reducers/userReducers';
 import { getMyOrders } from '../actions/orderActions';
 
 const ProfileScreen = () => {
   const user = useSelector((state) => state.user);
-  const { authUser, userDetails, error, success } = user;
+  const { authUser, userDetails, error, successUpdate } = user;
 
   const order = useSelector((state) => state.order);
   const { myOrders, loading, error: orderError } = order;
@@ -28,12 +29,16 @@ const ProfileScreen = () => {
   useEffect(() => {
     if (!authUser) {
       navigate('/login?redirect=/profile');
-    } else if (!userDetails) {
+    } else if (!userDetails || authUser._id !== userDetails._id) {
       dispatch(getProfile());
     } else {
       dispatch(getMyOrders());
       setName(userDetails.name);
       setEmail(userDetails.email);
+    }
+
+    if (successUpdate) {
+      setTimeout(() => dispatch(resetUpdateSuccess()), 3000);
     }
   }, [navigate, dispatch, authUser, userDetails]);
 
@@ -43,6 +48,8 @@ const ProfileScreen = () => {
       setMessage('Passwords do not match');
     } else {
       dispatch(updateProfile({ name, email, password }));
+      setPassword('');
+      setConfirmPassword('');
     }
   };
 
@@ -52,7 +59,7 @@ const ProfileScreen = () => {
         <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
-        {success && <Message variant='success'>Profile Updated</Message>}
+        {successUpdate && <Message variant='success'>Profile Updated</Message>}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>
             <Form.Label>Name</Form.Label>
