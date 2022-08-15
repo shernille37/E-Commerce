@@ -134,7 +134,7 @@ const getUserById = asyncHandler(async (req, res) => {
 // @access PRIVATE/Admin
 
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({ _id: { $ne: req.user._id } });
   res.json(users);
 });
 

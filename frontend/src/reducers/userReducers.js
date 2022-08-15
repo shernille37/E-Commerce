@@ -25,6 +25,9 @@ const userReducer = createSlice({
       state.userDetails = null;
       localStorage.removeItem('user');
     },
+    resetDeleteSuccess: (state, action) => {
+      state.successDelete = false;
+    },
     resetUpdateSuccess: (state, action) => {
       state.successUpdate = false;
     },
@@ -83,14 +86,14 @@ const userReducer = createSlice({
 
       // -- UPDATE PROFILE
       .addCase(updateProfile.pending, (state, action) => {
-        state.userDetails = null;
-        state.loading = true;
-        state.error = null;
+        state.loadingUpdate = true;
         state.successUpdate = false;
+        state.error = null;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         const { name, email } = action.payload;
-        state.loading = false;
+
+        state.loadingUpdate = false;
         state.successUpdate = true;
         state.userDetails = action.payload;
         // If the one updating is the logged in user then update the auth User
@@ -98,7 +101,6 @@ const userReducer = createSlice({
           state.authUser = { ...state.authUser, name, email };
       })
       .addCase(updateProfile.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload;
       })
 
@@ -119,18 +121,18 @@ const userReducer = createSlice({
       // DELETE USER
       .addCase(deleteUser.pending, (state, action) => {
         state.error = null;
-        state.loading = true;
+        state.loadingDelete = true;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.deleteSuccess = true;
+        state.successDelete = true;
+        state.loadingDelete = false;
       })
       .addCase(deleteUser.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
 export const userSlice = userReducer.reducer;
-export const { logout, resetUpdateSuccess } = userReducer.actions;
+export const { logout, resetUpdateSuccess, resetDeleteSuccess } =
+  userReducer.actions;

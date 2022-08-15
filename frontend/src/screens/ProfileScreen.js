@@ -12,7 +12,7 @@ import { getMyOrders } from '../actions/orderActions';
 
 const ProfileScreen = () => {
   const user = useSelector((state) => state.user);
-  const { authUser, userDetails, error, successUpdate } = user;
+  const { authUser, userDetails, error, successUpdate, loadingUpdate } = user;
 
   const order = useSelector((state) => state.order);
   const { myOrders, loading, error: orderError } = order;
@@ -32,10 +32,11 @@ const ProfileScreen = () => {
     } else if (!userDetails || authUser._id !== userDetails._id) {
       dispatch(getProfile());
     } else {
-      dispatch(getMyOrders());
       setName(userDetails.name);
       setEmail(userDetails.email);
     }
+
+    if (myOrders.length === 0 || !successUpdate) dispatch(getMyOrders());
 
     if (successUpdate) {
       setTimeout(() => dispatch(resetUpdateSuccess()), 3000);
@@ -59,6 +60,7 @@ const ProfileScreen = () => {
         <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
+        {loadingUpdate && <Message variant='info'>Updating...</Message>}
         {successUpdate && <Message variant='success'>Profile Updated</Message>}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>

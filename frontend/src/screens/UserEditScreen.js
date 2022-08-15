@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getProfile, updateProfile } from '../actions/userActions';
-import { resetUpdateSuccess } from '../reducers/userReducers';
 
 const UserEditScreen = () => {
   const [name, setName] = useState('');
@@ -24,7 +23,14 @@ const UserEditScreen = () => {
   const { id } = useParams();
 
   const user = useSelector((state) => state.user);
-  const { userDetails, authUser, loading, error, successUpdate } = user;
+  const {
+    userDetails,
+    authUser,
+    loading,
+    error,
+    successUpdate,
+    loadingUpdate,
+  } = user;
 
   const redirect = search.get('redirect') ? search.get('redirect') : '/';
 
@@ -40,7 +46,7 @@ const UserEditScreen = () => {
     }
 
     if (successUpdate) {
-      setTimeout(() => dispatch(resetUpdateSuccess()), 3000);
+      navigate(-1);
     }
   }, [dispatch, authUser, redirect, userDetails]);
 
@@ -65,10 +71,7 @@ const UserEditScreen = () => {
           <Message variant='danger'>{error}</Message>
         ) : (
           <>
-            {successUpdate && (
-              <Message variant='success'>Profile Updated</Message>
-            )}
-
+            {loadingUpdate && <Message variant='info'>Updating...</Message>}
             <Form onSubmit={submitHandler}>
               <Form.Group controlId='name'>
                 <Form.Label>Name</Form.Label>
@@ -98,7 +101,6 @@ const UserEditScreen = () => {
                   label='Is Admin'
                   checked={isAdmin}
                   onChange={(e) => setIsAdmin(e.target.checked)}
-                  required
                 ></Form.Check>
               </Form.Group>
 
