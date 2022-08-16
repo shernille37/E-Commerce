@@ -32,8 +32,6 @@ const userReducer = createSlice({
     builder
       .addCase(logout, (state, action) => {
         localStorage.removeItem('user');
-        localStorage.removeItem('paymentMethod');
-        localStorage.removeItem('shippingAddress');
         return userInitialState;
       })
       // --- LOGIN ---

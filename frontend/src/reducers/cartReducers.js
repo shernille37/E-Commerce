@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addToCart } from '../actions/cartActions';
+import { logout } from '../actions/userActions';
 
 const initialState = {
   cartItems: localStorage.getItem('cartItems')
@@ -61,6 +62,12 @@ const cartReducer = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(logout, (state, action) => {
+        localStorage.removeItem('cartItems');
+        localStorage.removeItem('paymentMethod');
+        localStorage.removeItem('shippingAddress');
+        return initialState;
+      })
       .addCase(addToCart.fulfilled, (state, action) => {
         const item = action.payload;
 
