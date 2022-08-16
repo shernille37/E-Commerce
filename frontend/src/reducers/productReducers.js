@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { listProducts, listProductDetails } from '../actions/productActions';
+import { logout } from '../actions/userActions';
 
 const productsInitialState = {
   products: [],

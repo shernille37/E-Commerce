@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { logout } from '../actions/userActions';
 import {
   createOrder,
   getOrderDetails,
@@ -17,7 +18,7 @@ const orderReducer = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-
+      .addCase(logout, () => initialState)
       // CREATE ORDER
       .addCase(createOrder.pending, (state, action) => {
         state.successOrder = false;

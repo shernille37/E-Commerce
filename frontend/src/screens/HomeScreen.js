@@ -5,7 +5,6 @@ import Loader from '../components/Loader';
 import Product from '../components/Product';
 import { useSelector, useDispatch } from 'react-redux';
 import { listProducts } from '../actions/productActions';
-import { getProfile } from '../actions/userActions';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();

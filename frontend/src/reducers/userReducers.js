@@ -6,6 +6,7 @@ import {
   updateProfile,
   getAllUsers,
   deleteUser,
+  logout,
 } from '../actions/userActions';
 
 const userInitialState = {
@@ -20,11 +21,6 @@ const userReducer = createSlice({
   name: 'user',
   initialState: userInitialState,
   reducers: {
-    logout: (state, action) => {
-      state.authUser = null;
-      state.userDetails = null;
-      localStorage.removeItem('user');
-    },
     resetDeleteSuccess: (state, action) => {
       state.successDelete = false;
     },
@@ -34,6 +30,12 @@ const userReducer = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(logout, (state, action) => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('paymentMethod');
+        localStorage.removeItem('shippingAddress');
+        return userInitialState;
+      })
       // --- LOGIN ---
       .addCase(login.pending, (state, action) => {
         state.error = null;
@@ -134,5 +136,4 @@ const userReducer = createSlice({
 });
 
 export const userSlice = userReducer.reducer;
-export const { logout, resetUpdateSuccess, resetDeleteSuccess } =
-  userReducer.actions;
+export const { resetUpdateSuccess, resetDeleteSuccess } = userReducer.actions;
