@@ -5,19 +5,20 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { listProducts } from '../../actions/productActions';
+import { listProducts, deleteProduct } from '../../actions/productActions';
 
 import {
   resetDeleteSuccess,
   resetUpdateSuccess,
-} from '../../reducers/userReducers';
+} from '../../reducers/productReducers';
 
 const ProductListScreen = () => {
   const user = useSelector((state) => state.user);
   const { authUser } = user;
 
   const productList = useSelector((state) => state.productList);
-  const { products, loading, error } = productList;
+  const { products, loading, error, loadingDelete, successDelete } =
+    productList;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,14 +26,21 @@ const ProductListScreen = () => {
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
-    } else if (products.length === 0) {
+    } else if (products.length === 0 || successDelete) {
       dispatch(listProducts());
     }
-  }, [dispatch, authUser]);
+
+    if (successDelete) {
+      setTimeout(() => {
+        dispatch(resetDeleteSuccess());
+        dispatch(resetUpdateSuccess());
+      }, 3000);
+    }
+  }, [dispatch, authUser, successDelete]);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
-      console.log('Delete Product');
+      dispatch(deleteProduct(id));
     }
   };
 
@@ -62,11 +70,11 @@ const ProductListScreen = () => {
       ) : (
         <>
           {}
-          {/* {loadingDelete && <Message variant='info'>Deleting...</Message>}
-          {successUpdate && (
+          {loadingDelete && <Message variant='info'>Deleting...</Message>}
+          {/* {successUpdate && (
             <Message variant='success'>Profile Updated</Message>
-          )}
-          {successDelete && <Message variant='success'>User Deleted</Message>} */}
+          )} */}
+          {successDelete && <Message variant='success'>User Deleted</Message>}
 
           <Table striped bordered hover responsive className='table-sm'>
             <thead>

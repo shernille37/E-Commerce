@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { listProducts, listProductDetails } from '../actions/productActions';
+import {
+  listProducts,
+  listProductDetails,
+  deleteProduct,
+} from '../actions/productActions';
 import { logout } from '../actions/userActions';
 
 const productsInitialState = {
@@ -14,12 +18,21 @@ const productDetailsInitialState = {
   loading: false,
 };
 
-export const productsSlice = createSlice({
+export const productsReducer = createSlice({
   name: 'products',
   initialState: productsInitialState,
-  reducers: {},
+  reducers: {
+    resetDeleteSuccess: (state, action) => {
+      state.successDelete = false;
+    },
+    resetUpdateSuccess: (state, action) => {
+      state.successUpdate = false;
+    },
+  },
   extraReducers(builder) {
     builder
+
+      // GET PRODUCTS
       .addCase(listProducts.pending, (state, action) => {
         state.error = null;
         state.loading = true;
@@ -31,11 +44,26 @@ export const productsSlice = createSlice({
       .addCase(listProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // DELETE PRODUCT
+      .addCase(deleteProduct.pending, (state, action) => {
+        state.error = null;
+        state.loadingDelete = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.successDelete = true;
+        state.loadingDelete = false;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.successDelete = false;
+        state.loadingDelete = false;
+        state.error = action.payload;
       });
   },
-}).reducer;
+});
 
-export const productDetailsSlice = createSlice({
+export const productDetailsReducer = createSlice({
   name: 'productDetails',
   initialState: productDetailsInitialState,
   reducers: {},
@@ -55,4 +83,10 @@ export const productDetailsSlice = createSlice({
         state.error = action.payload;
       });
   },
-}).reducer;
+});
+
+export const productsSlice = productsReducer.reducer;
+export const productDetailsSlice = productDetailsReducer.reducer;
+
+export const { resetDeleteSuccess, resetUpdateSuccess } =
+  productsReducer.actions;

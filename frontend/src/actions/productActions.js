@@ -32,3 +32,29 @@ export const listProductDetails = createAsyncThunk(
     }
   }
 );
+
+export const deleteProduct = createAsyncThunk(
+  '/api/products/:id',
+  async (id, { rejectWithValue }) => {
+    const { token } = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.delete(`/api/products/${id}`, config);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
