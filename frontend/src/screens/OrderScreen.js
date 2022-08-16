@@ -23,8 +23,8 @@ const OrderScreen = () => {
   useEffect(() => {
     if (!authUser) {
       navigate('/login');
-    }
-    dispatch(getOrderDetails(orderID));
+    } else if (!orderDetails || orderDetails._id !== orderID)
+      dispatch(getOrderDetails(orderID));
   }, [dispatch, orderID, authUser, successPayment]);
 
   return (

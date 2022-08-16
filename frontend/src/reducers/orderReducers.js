@@ -15,7 +15,11 @@ const initialState = {
 const orderReducer = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    resetSuccessOrder: (state, action) => {
+      state.successOrder = false;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(logout, () => initialState)
@@ -82,3 +86,5 @@ const orderReducer = createSlice({
 });
 
 export const orderSlice = orderReducer.reducer;
+
+export const { resetSuccessOrder } = orderReducer.actions;

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { calculatePrices } from '../reducers/cartReducers';
 import { createOrder } from '../actions/orderActions';
+import { resetSuccessOrder } from '../reducers/orderReducers';
 import LoginScreen from '../screens/LoginScreen';
 
 const PlaceOrderScreen = () => {
@@ -33,6 +34,7 @@ const PlaceOrderScreen = () => {
     if (!paymentMethod || !shippingAddress) {
       navigate('/payment');
     } else if (successOrder) {
+      dispatch(resetSuccessOrder());
       navigate(`/order/${createdOrder._id}`);
     }
 
