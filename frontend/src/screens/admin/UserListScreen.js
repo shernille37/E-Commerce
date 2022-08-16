@@ -3,13 +3,13 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { getAllUsers, deleteUser } from '../actions/userActions';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import { getAllUsers, deleteUser } from '../../actions/userActions';
 import {
   resetDeleteSuccess,
   resetUpdateSuccess,
-} from '../reducers/userReducers';
+} from '../../reducers/userReducers';
 
 const UserListScreen = () => {
   const user = useSelector((state) => state.user);

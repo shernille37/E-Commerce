@@ -17,8 +17,10 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
-import UserListScreen from './screens/UserListScreen';
-import UserEditScreen from './screens/UserEditScreen';
+import UserListScreen from './screens/admin/UserListScreen';
+import UserEditScreen from './screens/admin/UserEditScreen';
+import ProductListScreen from './screens/admin/ProductListScreen';
+import ProductEditScreen from './screens/admin/ProductEditScreen';
 
 function App() {
   const [clientID, setClientID] = useState(null);
@@ -59,6 +61,16 @@ function App() {
                   path='/admin/userlist/:id/edit'
                   element={<UserEditScreen />}
                 />
+                <Route
+                  path='/admin/productlist'
+                  element={<ProductListScreen />}
+                />
+
+                <Route
+                  path='/admin/productlist/:id/edit'
+                  element={<ProductEditScreen />}
+                />
+
                 <Route path='/shipping' element={<ShippingScreen />} />
                 <Route path='/payment' element={<PaymentScreen />} />
                 <Route path='/placeorder' element={<PlaceOrderScreen />} />

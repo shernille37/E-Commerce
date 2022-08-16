@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Link,
-  useSearchParams,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
-import FormContainer from '../components/FormContainer';
+import FormContainer from '../../components/FormContainer';
 import { useDispatch, useSelector } from 'react-redux';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { getProfile, updateProfile } from '../actions/userActions';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import { getProfile, updateProfile } from '../../actions/userActions';
 
 const UserEditScreen = () => {
   const [name, setName] = useState('');
@@ -19,7 +14,7 @@ const UserEditScreen = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [search, setSearch] = useSearchParams();
+
   const { id } = useParams();
 
   const user = useSelector((state) => state.user);
@@ -31,8 +26,6 @@ const UserEditScreen = () => {
     successUpdate,
     loadingUpdate,
   } = user;
-
-  const redirect = search.get('redirect') ? search.get('redirect') : '/';
 
   useEffect(() => {
     if (!authUser) {
@@ -48,7 +41,7 @@ const UserEditScreen = () => {
     if (successUpdate) {
       navigate(-1);
     }
-  }, [dispatch, authUser, redirect, userDetails]);
+  }, [dispatch, authUser, userDetails]);
 
   const submitHandler = (e) => {
     e.preventDefault();

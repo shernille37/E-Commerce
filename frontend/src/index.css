@@ -6,6 +6,10 @@ h3 {
   padding: 1rem 0;
 }
 
+textarea {
+  height: 150px !important;
+}
+
 .zoom-img-container {
   position: relative;
   z-index: 1;
