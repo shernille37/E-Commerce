@@ -5,7 +5,10 @@ import FormContainer from '../../components/FormContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { listProductDetails } from '../../actions/productActions';
+import {
+  listProductDetails,
+  updateProduct,
+} from '../../actions/productActions';
 
 const ProductEditScreen = () => {
   const [name, setName] = useState('');
@@ -27,7 +30,8 @@ const ProductEditScreen = () => {
   const { authUser } = user;
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { product, loading, error, loadingUpdate } = productDetails;
+  const { product, loading, error, loadingUpdate, successUpdate } =
+    productDetails;
 
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
@@ -45,10 +49,27 @@ const ProductEditScreen = () => {
     }
   }, [dispatch, authUser, product]);
 
+  useEffect(() => {
+    if (successUpdate) {
+      navigate(-1);
+    }
+  }, [successUpdate]);
+
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log('Submit');
+    dispatch(
+      updateProduct({
+        id: product._id,
+        name,
+        price,
+        category,
+        image,
+        countInStock,
+        brand,
+        description,
+      })
+    );
   };
 
   const uploadFileHandler = () => {
@@ -102,7 +123,7 @@ const ProductEditScreen = () => {
                 ></Form.Control>
               </Form.Group>
 
-              <Form.Group controlId='image-file'>
+              {/* <Form.Group controlId='image-file'>
                 <Form.Label>Upload Image</Form.Label>
 
                 <Form.Control
@@ -111,7 +132,7 @@ const ProductEditScreen = () => {
                   onChange={uploadFileHandler}
                 ></Form.Control>
                 {uploading && <Loader />}
-              </Form.Group>
+              </Form.Group> */}
 
               <Form.Group controlId='brand'>
                 <Form.Label>Brand</Form.Label>

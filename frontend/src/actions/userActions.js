@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 
 export const login = createAsyncThunk(
-  '/api/users/login',
+  'USER_LOGIN',
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const config = {
@@ -28,10 +28,10 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAction('/logout');
+export const logout = createAction('USER_LOGOUT');
 
 export const register = createAsyncThunk(
-  '/api/users/register',
+  'USER_REGISTER',
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
       const config = {
@@ -58,7 +58,7 @@ export const register = createAsyncThunk(
 );
 
 export const getProfile = createAsyncThunk(
-  '/api/users/profile',
+  'USER_GET_PROFILE',
   async (id, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -89,7 +89,7 @@ export const getProfile = createAsyncThunk(
 );
 
 export const updateProfile = createAsyncThunk(
-  '/api/users/updateProfile',
+  'USER_UPDATE_PROFILE',
   async ({ id, name, email, password, isAdmin }, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -121,7 +121,7 @@ export const updateProfile = createAsyncThunk(
 );
 
 export const getAllUsers = createAsyncThunk(
-  '/api/users',
+  'GET_ALL_USERS',
   async (id, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -148,7 +148,7 @@ export const getAllUsers = createAsyncThunk(
 );
 
 export const deleteUser = createAsyncThunk(
-  '/api/users/:id',
+  'DELETE_USER',
   async (id, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))

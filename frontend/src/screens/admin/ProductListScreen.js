@@ -26,7 +26,7 @@ const ProductListScreen = () => {
     productList;
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { product, successCreate } = productDetails;
+  const { product, successCreate, successUpdate } = productDetails;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,17 +43,15 @@ const ProductListScreen = () => {
     if (successCreate) {
       dispatch(resetCreateSuccess());
       navigate(`${product._id}/edit`);
-    } else if (successDelete) {
-      dispatch(listProducts());
     }
 
-    if (successDelete) {
+    if (successDelete || successUpdate) {
       setTimeout(() => {
         dispatch(resetDeleteSuccess());
         dispatch(resetUpdateSuccess());
       }, 3000);
     }
-  }, [dispatch, successDelete, successCreate]);
+  }, [dispatch, successDelete, successCreate, successUpdate]);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
@@ -88,9 +86,9 @@ const ProductListScreen = () => {
         <>
           {}
           {loadingDelete && <Message variant='info'>Deleting...</Message>}
-          {/* {successUpdate && (
+          {successUpdate && (
             <Message variant='success'>Product Updated</Message>
-          )} */}
+          )}
           {successDelete && (
             <Message variant='success'>Product Deleted</Message>
           )}

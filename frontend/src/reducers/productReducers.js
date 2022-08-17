@@ -4,6 +4,7 @@ import {
   listProductDetails,
   createProduct,
   deleteProduct,
+  updateProduct,
 } from '../actions/productActions';
 import { logout } from '../actions/userActions';
 
@@ -25,9 +26,6 @@ export const productsReducer = createSlice({
   reducers: {
     resetDeleteSuccess: (state, action) => {
       state.successDelete = false;
-    },
-    resetUpdateSuccess: (state, action) => {
-      state.successUpdate = false;
     },
   },
   extraReducers(builder) {
@@ -71,6 +69,9 @@ export const productDetailsReducer = createSlice({
     resetCreateSuccess: (state, action) => {
       state.successCreate = false;
     },
+    resetUpdateSuccess: (state, action) => {
+      state.successUpdate = false;
+    },
   },
   extraReducers(builder) {
     builder
@@ -102,6 +103,23 @@ export const productDetailsReducer = createSlice({
       .addCase(listProductDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // UPDATE PRODUCT
+      .addCase(updateProduct.pending, (state, action) => {
+        state.successUpdate = false;
+        state.loadingUpdate = true;
+        state.error = null;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.successUpdate = true;
+        state.loadingUpdate = false;
+        state.product = action.payload;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.successUpdate = false;
+        state.loadingUpdate = false;
+        state.error = action.payload;
       });
   },
 });
@@ -109,7 +127,7 @@ export const productDetailsReducer = createSlice({
 export const productsSlice = productsReducer.reducer;
 export const productDetailsSlice = productDetailsReducer.reducer;
 
-export const { resetDeleteSuccess, resetUpdateSuccess } =
-  productsReducer.actions;
+export const { resetDeleteSuccess } = productsReducer.actions;
 
-export const { resetCreateSuccess } = productDetailsReducer.actions;
+export const { resetCreateSuccess, resetUpdateSuccess } =
+  productDetailsReducer.actions;

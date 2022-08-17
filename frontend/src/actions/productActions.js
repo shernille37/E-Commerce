@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const listProducts = createAsyncThunk(
-  '/api/products',
+  'GET_LIST_PRODUCTS',
   async (x, { rejectWithValue }) => {
     try {
       const { data } = await axios.get('/api/products');
@@ -18,7 +18,7 @@ export const listProducts = createAsyncThunk(
 );
 
 export const listProductDetails = createAsyncThunk(
-  '/api/productDetails',
+  'GET_PRODUCT_DETAILS',
   async (id, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`/api/products/${id}`);
@@ -34,7 +34,7 @@ export const listProductDetails = createAsyncThunk(
 );
 
 export const createProduct = createAsyncThunk(
-  '/api/products/:id/edit',
+  'CREATE_PRODUCT',
   async (id, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -59,8 +59,42 @@ export const createProduct = createAsyncThunk(
   }
 );
 
+export const updateProduct = createAsyncThunk(
+  'UPDATE_PRODUCT',
+  async (
+    { id, name, price, category, image, countInStock, brand, description },
+    { rejectWithValue }
+  ) => {
+    const { token } = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null;
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/products/${id}`,
+        { name, price, category, image, countInStock, brand, description },
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 export const deleteProduct = createAsyncThunk(
-  '/api/products/:id',
+  'DELETE_PRODUCT',
   async (id, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))

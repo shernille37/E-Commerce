@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const createOrder = createAsyncThunk(
-  'api/orders',
+  'CREATE_ORDER',
   async (order, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -30,7 +30,7 @@ export const createOrder = createAsyncThunk(
 );
 
 export const getMyOrders = createAsyncThunk(
-  '/api/orders/myorders',
+  'GET_MY_ORDERS',
   async (x, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -57,7 +57,7 @@ export const getMyOrders = createAsyncThunk(
 );
 
 export const getOrderDetails = createAsyncThunk(
-  '/api/orders/:id',
+  'GET_ORDER_DETAILS',
   async (id, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
@@ -84,7 +84,7 @@ export const getOrderDetails = createAsyncThunk(
 );
 
 export const payOrder = createAsyncThunk(
-  '/api/orders/:id/pay',
+  'PAY_ORDER',
   async ({ orderID, paymentResult }, { rejectWithValue }) => {
     const { token } = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
