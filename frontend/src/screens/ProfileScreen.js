@@ -15,7 +15,7 @@ const ProfileScreen = () => {
   const { authUser, userDetails, error, successUpdate, loadingUpdate } = user;
 
   const order = useSelector((state) => state.order);
-  const { myOrders, loading, error: orderError } = order;
+  const { myOrders, loadingOrder, error: orderError } = order;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,14 +28,13 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     if (!authUser) {
-      navigate('/login?redirect=/profile');
+      navigate('/login');
     } else if (!userDetails || authUser._id !== userDetails._id) {
       dispatch(getProfile());
     } else {
       setName(userDetails.name);
       setEmail(userDetails.email);
     }
-    if (!successUpdate) dispatch(getMyOrders());
   }, [navigate, dispatch, authUser, userDetails]);
 
   useEffect(() => {
@@ -43,6 +42,10 @@ const ProfileScreen = () => {
       setTimeout(() => dispatch(resetUpdateSuccess()), 3000);
     }
   }, [dispatch, successUpdate]);
+
+  useEffect(() => {
+    dispatch(getMyOrders());
+  }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -115,7 +118,7 @@ const ProfileScreen = () => {
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
-        {loading ? (
+        {loadingOrder ? (
           <Loader />
         ) : orderError ? (
           <Message variant={'danger'}>{orderError}</Message>

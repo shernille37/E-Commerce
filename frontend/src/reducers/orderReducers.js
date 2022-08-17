@@ -75,14 +75,14 @@ const orderReducer = createSlice({
       // GET MY ORDERS
       .addCase(getMyOrders.pending, (state, action) => {
         state.error = null;
-        state.loading = true;
+        state.loadingOrder = true;
       })
       .addCase(getMyOrders.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingOrder = false;
         state.myOrders = action.payload;
       })
       .addCase(getMyOrders.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingOrder = false;
         state.error = action.payload;
       });
   },

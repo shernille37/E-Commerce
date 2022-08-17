@@ -19,7 +19,7 @@ const PaymentScreen = () => {
   const [payment, setPayment] = useState('Paypal');
 
   useEffect(() => {
-    if (!authUser) navigate('/checkout/signin');
+    if (!authUser) navigate('/checkout');
     if (!shippingAddress) {
       navigate('/checkout/shipping');
     }

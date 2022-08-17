@@ -17,7 +17,7 @@ const CheckOut = () => {
   const step4 = paymentMethod ? true : false;
 
   useEffect(() => {
-    if (!authUser) navigate('/login?redirect=/checkout');
+    if (!authUser) navigate('/login?redirect=/checkout/shipping');
     else navigate('/checkout/shipping');
   }, [authUser]);
 

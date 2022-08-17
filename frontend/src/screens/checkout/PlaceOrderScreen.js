@@ -30,7 +30,7 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authUser) navigate('/checkout/signin');
+    if (!authUser) navigate('/checkout');
     else if (!paymentMethod || !shippingAddress) navigate('/checkout/payment');
     dispatch(calculatePrices());
   }, [shippingAddress, paymentMethod]);

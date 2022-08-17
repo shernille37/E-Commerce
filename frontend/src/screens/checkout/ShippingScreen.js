@@ -22,7 +22,7 @@ const ShippingScreen = () => {
   const [country, setCountry] = useState('');
 
   useEffect(() => {
-    if (!authUser) navigate('/checkout/signin');
+    if (!authUser) navigate('/checkout');
     if (shippingAddress) {
       setAddress(shippingAddress.address);
       setCity(shippingAddress.city);

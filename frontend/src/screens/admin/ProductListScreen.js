@@ -43,10 +43,12 @@ const ProductListScreen = () => {
     if (successCreate) {
       dispatch(resetCreateSuccess());
       navigate(`${product._id}/edit`);
+    } else if (successDelete) {
+      dispatch(listProducts());
     }
 
     if (successDelete || successUpdate) {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         dispatch(resetDeleteSuccess());
         dispatch(resetUpdateSuccess());
       }, 3000);
