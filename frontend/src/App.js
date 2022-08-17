@@ -13,14 +13,15 @@ import NotFound from './components/NotFound';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import ShippingScreen from './screens/ShippingScreen';
-import PaymentScreen from './screens/PaymentScreen';
-import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import ShippingScreen from './screens/checkout/ShippingScreen';
+import PaymentScreen from './screens/checkout/PaymentScreen';
+import PlaceOrderScreen from './screens/checkout/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import UserListScreen from './screens/admin/UserListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import ProductListScreen from './screens/admin/ProductListScreen';
 import ProductEditScreen from './screens/admin/ProductEditScreen';
+import CheckOut from './screens/checkout/CheckOut';
 
 function App() {
   const [clientID, setClientID] = useState(null);
@@ -71,9 +72,12 @@ function App() {
                   element={<ProductEditScreen />}
                 />
 
-                <Route path='/shipping' element={<ShippingScreen />} />
-                <Route path='/payment' element={<PaymentScreen />} />
-                <Route path='/placeorder' element={<PlaceOrderScreen />} />
+                <Route path='/checkout' element={<CheckOut />}>
+                  <Route path='shipping' element={<ShippingScreen />} />
+                  <Route path='payment' element={<PaymentScreen />} />
+                  <Route path='placeorder' element={<PlaceOrderScreen />} />
+                </Route>
+
                 <Route path='/order/:id' element={<OrderScreen />} />
               </Routes>
             </Container>

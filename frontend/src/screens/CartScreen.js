@@ -37,7 +37,7 @@ const CartScreen = () => {
   };
 
   const checkoutHandler = () => {
-    navigate('/shipping');
+    navigate('/checkout');
   };
 
   return (

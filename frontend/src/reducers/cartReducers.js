@@ -59,6 +59,11 @@ const cartReducer = createSlice({
           Number(state.taxPrice)
       );
     },
+
+    resetCartItems: (state, action) => {
+      localStorage.removeItem('cartItems');
+      state.cartItems = [];
+    },
   },
   extraReducers(builder) {
     builder
@@ -66,7 +71,12 @@ const cartReducer = createSlice({
         localStorage.removeItem('cartItems');
         localStorage.removeItem('paymentMethod');
         localStorage.removeItem('shippingAddress');
-        return initialState;
+        return {
+          ...initialState,
+          cartItems: [],
+          shippingAddress: null,
+          paymentMethod: null,
+        };
       })
       .addCase(addToCart.fulfilled, (state, action) => {
         const item = action.payload;
@@ -99,4 +109,5 @@ export const {
   saveShippingAddress,
   savePaymentMethod,
   calculatePrices,
+  resetCartItems,
 } = cartReducer.actions;

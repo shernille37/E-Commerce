@@ -33,7 +33,7 @@ const userReducer = createSlice({
       .addCase(logout, (state, action) => {
         localStorage.removeItem('user');
 
-        return userInitialState;
+        return { ...userInitialState, authUser: null };
       })
       // --- LOGIN ---
       .addCase(login.pending, (state, action) => {

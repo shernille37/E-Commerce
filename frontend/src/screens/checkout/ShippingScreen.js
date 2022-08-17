@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import Message from '../components/Message';
+import Message from '../../components/Message';
 import { Link } from 'react-router-dom';
-import FormContainer from '../components/FormContainer';
-import CheckoutSteps from '../components/CheckoutSteps';
+import FormContainer from '../../components/FormContainer';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { saveShippingAddress } from '../reducers/cartReducers';
-import LoginScreen from '../screens/LoginScreen';
+import { saveShippingAddress } from '../../reducers/cartReducers';
 
 const ShippingScreen = () => {
   const authUser = useSelector((state) => state.user.authUser);
@@ -23,6 +22,7 @@ const ShippingScreen = () => {
   const [country, setCountry] = useState('');
 
   useEffect(() => {
+    if (!authUser) navigate('/checkout/signin');
     if (shippingAddress) {
       setAddress(shippingAddress.address);
       setCity(shippingAddress.city);
@@ -41,16 +41,12 @@ const ShippingScreen = () => {
         country,
       })
     );
-    navigate('/payment');
+    navigate('/checkout/payment');
   };
 
   return (
     <>
-      {!authUser ? (
-        <>
-          <CheckoutSteps step1 /> <LoginScreen />
-        </>
-      ) : cartItems.length === 0 ? (
+      {cartItems.length === 0 ? (
         <Message>
           Your cart is empty{' '}
           <Link to='/'>
@@ -60,13 +56,8 @@ const ShippingScreen = () => {
         </Message>
       ) : (
         <>
+          <h1 className='text-center'>Shipping</h1>
           <FormContainer>
-            <CheckoutSteps
-              step2
-              step3={shippingAddress ? true : false}
-              step4={paymentMethod ? true : false}
-            />
-            <h1>Shipping</h1>
             <Form onSubmit={submitHandler}>
               <Form.Group controlId='address'>
                 <Form.Label>Address</Form.Label>

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
-import Message from '../components/Message';
+import Message from '../../components/Message';
 import { Link } from 'react-router-dom';
-import FormContainer from '../components/FormContainer';
-import CheckoutSteps from '../components/CheckoutSteps';
+import FormContainer from '../../components/FormContainer';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { savePaymentMethod } from '../reducers/cartReducers';
-import LoginScreen from '../screens/LoginScreen';
+import { savePaymentMethod } from '../../reducers/cartReducers';
 
 const PaymentScreen = () => {
   const authUser = useSelector((state) => state.user.authUser);
@@ -20,24 +19,21 @@ const PaymentScreen = () => {
   const [payment, setPayment] = useState('Paypal');
 
   useEffect(() => {
+    if (!authUser) navigate('/checkout/signin');
     if (!shippingAddress) {
-      navigate('/shipping');
+      navigate('/checkout/shipping');
     }
   }, [shippingAddress, paymentMethod]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(savePaymentMethod(payment));
-    navigate('/placeorder');
+    navigate('/checkout/placeorder');
   };
 
   return (
     <>
-      {!authUser ? (
-        <>
-          <CheckoutSteps step1 /> <LoginScreen />
-        </>
-      ) : cartItems.length === 0 ? (
+      {cartItems.length === 0 ? (
         <Message>
           Your cart is empty{' '}
           <Link to='/'>
@@ -47,9 +43,8 @@ const PaymentScreen = () => {
         </Message>
       ) : (
         <>
+          <h1 className='text-center'>Payment Method</h1>
           <FormContainer>
-            <CheckoutSteps step2 step3 step4={paymentMethod ? true : false} />
-            <h1>Payment Method</h1>
             <Form onSubmit={submitHandler}>
               <Form.Group>
                 <Form.Label as='legend'>Select Payment Method</Form.Label>

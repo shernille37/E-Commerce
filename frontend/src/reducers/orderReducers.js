@@ -33,6 +33,9 @@ const orderReducer = createSlice({
         state.loading = false;
         state.successOrder = true;
         state.order = action.payload;
+
+        // Clear cart
+        localStorage.removeItem('cartItems');
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.successOrder = false;

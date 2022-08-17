@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
-import CheckoutSteps from '../components/CheckoutSteps';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { calculatePrices } from '../reducers/cartReducers';
-import { createOrder } from '../actions/orderActions';
-import { resetSuccessOrder } from '../reducers/orderReducers';
-import LoginScreen from '../screens/LoginScreen';
+import { calculatePrices } from '../../reducers/cartReducers';
+import { createOrder } from '../../actions/orderActions';
+import { resetSuccessOrder } from '../../reducers/orderReducers';
+import { resetCartItems } from '../../reducers/cartReducers';
 
 const PlaceOrderScreen = () => {
   const authUser = useSelector((state) => state.user.authUser);
@@ -31,15 +30,18 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!paymentMethod || !shippingAddress) {
-      navigate('/payment');
-    } else if (successOrder) {
-      dispatch(resetSuccessOrder());
-      navigate(`/order/${createdOrder._id}`);
-    }
-
+    if (!authUser) navigate('/checkout/signin');
+    else if (!paymentMethod || !shippingAddress) navigate('/checkout/payment');
     dispatch(calculatePrices());
-  }, [dispatch, paymentMethod, shippingAddress, successOrder]);
+  }, [shippingAddress, paymentMethod]);
+
+  useEffect(() => {
+    if (successOrder) {
+      navigate(`/order/${createdOrder._id}`);
+      dispatch(resetSuccessOrder());
+      dispatch(resetCartItems());
+    }
+  }, [dispatch, successOrder]);
 
   const placeOrderHandler = () => {
     dispatch(
@@ -57,11 +59,7 @@ const PlaceOrderScreen = () => {
 
   return (
     <>
-      {!authUser ? (
-        <>
-          <CheckoutSteps step1 /> <LoginScreen />
-        </>
-      ) : cartItems.length === 0 ? (
+      {cartItems.length === 0 ? (
         <Message>
           Your cart is empty{' '}
           <Link to='/'>
@@ -73,7 +71,6 @@ const PlaceOrderScreen = () => {
         <Loader />
       ) : (
         <>
-          <CheckoutSteps step2 step3 step4 />
           <Row>
             <Col md={8}>
               <ListGroup variant='flush'>
