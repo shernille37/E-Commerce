@@ -35,13 +35,14 @@ const ProfileScreen = () => {
       setName(userDetails.name);
       setEmail(userDetails.email);
     }
+    if (!successUpdate) dispatch(getMyOrders());
+  }, [navigate, dispatch, authUser, userDetails]);
 
-    if (myOrders.length === 0 || !successUpdate) dispatch(getMyOrders());
-
+  useEffect(() => {
     if (successUpdate) {
       setTimeout(() => dispatch(resetUpdateSuccess()), 3000);
     }
-  }, [navigate, dispatch, authUser, userDetails]);
+  }, [dispatch, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

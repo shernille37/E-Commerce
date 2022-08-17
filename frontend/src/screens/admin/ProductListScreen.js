@@ -5,11 +5,16 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { listProducts, deleteProduct } from '../../actions/productActions';
+import {
+  listProducts,
+  deleteProduct,
+  createProduct,
+} from '../../actions/productActions';
 
 import {
   resetDeleteSuccess,
   resetUpdateSuccess,
+  resetCreateSuccess,
 } from '../../reducers/productReducers';
 
 const ProductListScreen = () => {
@@ -20,13 +25,25 @@ const ProductListScreen = () => {
   const { products, loading, error, loadingDelete, successDelete } =
     productList;
 
+  const productDetails = useSelector((state) => state.productDetails);
+  const { product, successCreate } = productDetails;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
-    } else if (products.length === 0 || successDelete) {
+    } else {
+      dispatch(listProducts());
+    }
+  }, [dispatch, authUser]);
+
+  useEffect(() => {
+    if (successCreate) {
+      dispatch(resetCreateSuccess());
+      navigate(`${product._id}/edit`);
+    } else if (successDelete) {
       dispatch(listProducts());
     }
 
@@ -36,7 +53,7 @@ const ProductListScreen = () => {
         dispatch(resetUpdateSuccess());
       }, 3000);
     }
-  }, [dispatch, authUser, successDelete]);
+  }, [dispatch, successDelete, successCreate]);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
@@ -45,7 +62,7 @@ const ProductListScreen = () => {
   };
 
   const createProductHandler = () => {
-    console.log('Create Product');
+    dispatch(createProduct());
   };
 
   return (
@@ -72,9 +89,11 @@ const ProductListScreen = () => {
           {}
           {loadingDelete && <Message variant='info'>Deleting...</Message>}
           {/* {successUpdate && (
-            <Message variant='success'>Profile Updated</Message>
+            <Message variant='success'>Product Updated</Message>
           )} */}
-          {successDelete && <Message variant='success'>User Deleted</Message>}
+          {successDelete && (
+            <Message variant='success'>Product Deleted</Message>
+          )}
 
           <Table striped bordered hover responsive className='table-sm'>
             <thead>

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   listProducts,
   listProductDetails,
+  createProduct,
   deleteProduct,
 } from '../actions/productActions';
 import { logout } from '../actions/userActions';
@@ -66,9 +67,29 @@ export const productsReducer = createSlice({
 export const productDetailsReducer = createSlice({
   name: 'productDetails',
   initialState: productDetailsInitialState,
-  reducers: {},
+  reducers: {
+    resetCreateSuccess: (state, action) => {
+      state.successCreate = false;
+    },
+  },
   extraReducers(builder) {
     builder
+      // CREATE PRODUCT
+      .addCase(createProduct.pending, (state, action) => {
+        state.successCreate = false;
+        state.loadingCreate = true;
+        state.error = null;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.successCreate = true;
+        state.loadingCreate = false;
+        state.product = action.payload;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.successCreate = false;
+        state.loadingCreate = false;
+        state.error = action.payload;
+      })
       .addCase(listProductDetails.pending, (state, action) => {
         state.error = null;
         state.loading = true;
@@ -90,3 +111,5 @@ export const productDetailsSlice = productDetailsReducer.reducer;
 
 export const { resetDeleteSuccess, resetUpdateSuccess } =
   productsReducer.actions;
+
+export const { resetCreateSuccess } = productDetailsReducer.actions;

@@ -11,8 +11,12 @@ const ProductEditScreen = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState('');
+  const [image, setImage] = useState('');
+  const [countInStock, setCountInStock] = useState(0);
   const [brand, setBrand] = useState('');
   const [description, setDescription] = useState('');
+
+  const [uploading, setUploading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,7 +38,8 @@ const ProductEditScreen = () => {
       setName(product.name);
       setPrice(product.price);
       setCategory(product.category);
-
+      setImage(product.image);
+      setCountInStock(product.countInStock);
       setBrand(product.brand);
       setDescription(product.description);
     }
@@ -44,6 +49,10 @@ const ProductEditScreen = () => {
     e.preventDefault();
 
     console.log('Submit');
+  };
+
+  const uploadFileHandler = () => {
+    console.log('Upload');
   };
 
   return (
@@ -61,16 +70,15 @@ const ProductEditScreen = () => {
           <Message variant='danger'>{error}</Message>
         ) : (
           <>
-            {loadingUpdate && <Message variant='info'>Updating...</Message>}
+            {loadingUpdate && <Message variant={'info'}>Updating...</Message>}
             <Form onSubmit={submitHandler}>
               <Form.Group controlId='name'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
-                  type='text'
+                  type='name'
                   placeholder='Enter name'
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
                 ></Form.Control>
               </Form.Group>
 
@@ -81,7 +89,47 @@ const ProductEditScreen = () => {
                   placeholder='Enter price'
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  required
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId='image'>
+                <Form.Label>Image</Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter image url'
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId='image-file'>
+                <Form.Label>Upload Image</Form.Label>
+
+                <Form.Control
+                  type='file'
+                  label='Choose File'
+                  onChange={uploadFileHandler}
+                ></Form.Control>
+                {uploading && <Loader />}
+              </Form.Group>
+
+              <Form.Group controlId='brand'>
+                <Form.Label>Brand</Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter brand'
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId='countInStock'>
+                <Form.Label>Count In Stock</Form.Label>
+                <Form.Control
+                  type='number'
+                  placeholder='Enter countInStock'
+                  value={countInStock}
+                  onChange={(e) => setCountInStock(e.target.value)}
                 ></Form.Control>
               </Form.Group>
 
@@ -89,33 +137,23 @@ const ProductEditScreen = () => {
                 <Form.Label>Category</Form.Label>
                 <Form.Control
                   type='text'
+                  placeholder='Enter category'
                   value={category}
-                  required
-                  onChange={(e) => setCategory(e.target.checked)}
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId='brand'>
-                <Form.Label>Brand</Form.Label>
-                <Form.Control
-                  type='text'
-                  value={brand}
-                  required
-                  onChange={(e) => setBrand(e.target.checked)}
+                  onChange={(e) => setCategory(e.target.value)}
                 ></Form.Control>
               </Form.Group>
 
               <Form.Group controlId='description'>
                 <Form.Label>Description</Form.Label>
                 <Form.Control
-                  as='textarea'
+                  type='text'
+                  placeholder='Enter description'
                   value={description}
-                  required
-                  onChange={(e) => setDescription(e.target.checked)}
+                  onChange={(e) => setDescription(e.target.value)}
                 ></Form.Control>
               </Form.Group>
 
-              <Button className='mt-2' type='submit' variant='primary'>
+              <Button type='submit' variant='primary'>
                 Update
               </Button>
             </Form>

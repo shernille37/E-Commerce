@@ -33,6 +33,32 @@ export const listProductDetails = createAsyncThunk(
   }
 );
 
+export const createProduct = createAsyncThunk(
+  '/api/products/:id/edit',
+  async (id, { rejectWithValue }) => {
+    const { token } = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.post(`/api/products`, {}, config);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 export const deleteProduct = createAsyncThunk(
   '/api/products/:id',
   async (id, { rejectWithValue }) => {

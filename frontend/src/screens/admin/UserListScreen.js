@@ -29,7 +29,13 @@ const UserListScreen = () => {
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
-    } else if (userList.length === 0 || successDelete || successUpdate) {
+    } else {
+      dispatch(getAllUsers());
+    }
+  }, [dispatch, authUser]);
+
+  useEffect(() => {
+    if (successDelete || successUpdate) {
       dispatch(getAllUsers());
     }
 
