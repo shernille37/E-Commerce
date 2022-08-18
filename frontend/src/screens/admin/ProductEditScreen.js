@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import FormContainer from '../../components/FormContainer';
@@ -72,8 +73,28 @@ const ProductEditScreen = () => {
     );
   };
 
-  const uploadFileHandler = () => {
-    console.log('Upload');
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+
+    formData.append('img', file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post('/api/upload', formData, config);
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
   };
 
   return (
@@ -123,7 +144,7 @@ const ProductEditScreen = () => {
                 ></Form.Control>
               </Form.Group>
 
-              {/* <Form.Group controlId='image-file'>
+              <Form.Group controlId='image-file'>
                 <Form.Label>Upload Image</Form.Label>
 
                 <Form.Control
@@ -132,7 +153,7 @@ const ProductEditScreen = () => {
                   onChange={uploadFileHandler}
                 ></Form.Control>
                 {uploading && <Loader />}
-              </Form.Group> */}
+              </Form.Group>
 
               <Form.Group controlId='brand'>
                 <Form.Label>Brand</Form.Label>
