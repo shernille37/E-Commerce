@@ -67,7 +67,13 @@ const UserListScreen = () => {
           )}
           {successDelete && <Message variant='success'>User Deleted</Message>}
 
-          <Table striped bordered hover responsive className='table-sm'>
+          <Table
+            striped
+            bordered
+            hover
+            responsive
+            className='table-sm text-center'
+          >
             <thead>
               <tr>
                 <th>ID</th>

@@ -20,6 +20,8 @@ const OrderScreen = () => {
   const params = useParams();
   const orderID = params.id;
 
+  const DATE_FORMAT = 'dddd, mmm dS, yyyy';
+
   useEffect(() => {
     if (!authUser) {
       navigate('/login');
@@ -61,10 +63,7 @@ const OrderScreen = () => {
                   {orderDetails.isDelivered ? (
                     <Message variant={'success'}>
                       Delivered on{' '}
-                      {dateFormat(
-                        orderDetails.deliveredAt,
-                        'dddd, mmm dS, yyyy'
-                      )}
+                      {dateFormat(orderDetails.deliveredAt, DATE_FORMAT)}
                     </Message>
                   ) : (
                     <Message variant={'danger'}>Not Delivered</Message>
@@ -79,8 +78,7 @@ const OrderScreen = () => {
                   </div>
                   {orderDetails.isPaid ? (
                     <Message variant={'success'}>
-                      Paid on{' '}
-                      {dateFormat(orderDetails.paidAt, 'dddd, mmm dS, yyyy')}
+                      Paid on {dateFormat(orderDetails.paidAt, DATE_FORMAT)}
                     </Message>
                   ) : (
                     <Message variant={'danger'}>Not Paid</Message>

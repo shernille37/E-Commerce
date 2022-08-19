@@ -5,11 +5,13 @@ import {
   getOrderDetails,
   payOrder,
   getMyOrders,
+  getAllOrders,
 } from '../actions/orderActions';
 
 const initialState = {
   order: null,
   myOrders: [],
+  orderList: [],
 };
 
 const orderReducer = createSlice({
@@ -37,9 +39,24 @@ const orderReducer = createSlice({
         // Clear cart
         localStorage.removeItem('cartItems');
       })
+
       .addCase(createOrder.rejected, (state, action) => {
         state.successOrder = false;
         state.loading = false;
+        state.error = action.payload;
+      })
+
+      // GET ALL ORDERS
+      .addCase(getAllOrders.pending, (state, action) => {
+        state.loadingOrder = true;
+        state.error = null;
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.loadingOrder = false;
+        state.orderList = action.payload;
+      })
+      .addCase(getAllOrders.rejected, (state, action) => {
+        state.loadingOrder = false;
         state.error = action.payload;
       })
 

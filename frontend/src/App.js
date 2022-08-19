@@ -22,6 +22,7 @@ import UserEditScreen from './screens/admin/UserEditScreen';
 import ProductListScreen from './screens/admin/ProductListScreen';
 import ProductEditScreen from './screens/admin/ProductEditScreen';
 import CheckOut from './screens/checkout/CheckOut';
+import OrderListScreen from './screens/admin/OrderListScreen';
 
 function App() {
   const [clientID, setClientID] = useState(null);
@@ -72,13 +73,14 @@ function App() {
                   element={<ProductEditScreen />}
                 />
 
+                <Route path='/order/:id' element={<OrderScreen />} />
+                <Route path='/admin/orderlist' element={<OrderListScreen />} />
+
                 <Route path='/checkout' element={<CheckOut />}>
                   <Route path='shipping' element={<ShippingScreen />} />
                   <Route path='payment' element={<PaymentScreen />} />
                   <Route path='placeorder' element={<PlaceOrderScreen />} />
                 </Route>
-
-                <Route path='/order/:id' element={<OrderScreen />} />
               </Routes>
             </Container>
           </main>

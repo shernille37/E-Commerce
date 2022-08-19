@@ -15,7 +15,7 @@ connectDB();
 const importData = async () => {
   try {
     //Wipe all the data in the DB before importing new data
-    await Order.deleteMany();
+    // await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
 

@@ -16,7 +16,6 @@ const PayPalButton = ({ currency, amount }) => {
   const style = {
     layout: 'vertical',
     color: 'blue',
-    label: 'checkout',
   };
 
   useEffect(() => {

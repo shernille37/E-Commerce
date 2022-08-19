@@ -55,7 +55,7 @@ const ProductScreen = () => {
         <>
           <Row>
             <Col md={6}>
-              <ZoomImage img={product.image} alt={product.name} />
+              <Image src={product.image} alt={product.name} fluid />
             </Col>
 
             <Col md={3}>
