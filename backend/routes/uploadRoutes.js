@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import { isAdmin, protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -35,7 +36,7 @@ const upload = multer({
   },
 });
 
-router.post('/', upload.single('img'), (req, res) => {
+router.post('/', protect, isAdmin, upload.single('img'), (req, res) => {
   res.send(`/${req.file.path}`);
 });
 

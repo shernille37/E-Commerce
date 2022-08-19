@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import PayPalButton from '../components/PayPalButton';
 import dateFormat from 'dateformat';
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getOrderDetails, payOrder } from '../actions/orderActions';
+import { deliverOrder, getOrderDetails } from '../actions/orderActions';
 
 const OrderScreen = () => {
   const authUser = useSelector((state) => state.user.authUser);
 
   const order = useSelector((state) => state.order);
-  const { order: orderDetails, error, loading, successPayment } = order;
+  const {
+    order: orderDetails,
+    error,
+    loading,
+    successPayment,
+    successDeliver,
+  } = order;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,9 +31,17 @@ const OrderScreen = () => {
   useEffect(() => {
     if (!authUser) {
       navigate('/login');
-    } else if (!orderDetails || orderDetails._id !== orderID || successPayment)
+    } else if (!orderDetails || orderDetails._id !== orderID)
       dispatch(getOrderDetails(orderID));
-  }, [dispatch, orderID, authUser, successPayment]);
+  }, [dispatch, orderID, authUser]);
+
+  useEffect(() => {
+    if (successPayment || successDeliver) dispatch(getOrderDetails(orderID));
+  }, [successPayment, successDeliver]);
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(orderID));
+  };
 
   return (
     <>
@@ -158,14 +172,27 @@ const OrderScreen = () => {
 
                   {!orderDetails.isPaid && (
                     <ListGroup.Item>
-                      {loading && <Loader />}
-
                       <PayPalButton
                         currency={'EUR'}
                         amount={orderDetails.priceInfo.totalPrice}
                       />
                     </ListGroup.Item>
                   )}
+
+                  {authUser &&
+                    authUser.isAdmin &&
+                    orderDetails.isPaid &&
+                    !orderDetails.isDelivered && (
+                      <ListGroup.Item>
+                        <Button
+                          type='button'
+                          className='btn btn-block'
+                          onClick={deliverHandler}
+                        >
+                          Mark as Delivered
+                        </Button>
+                      </ListGroup.Item>
+                    )}
                 </ListGroup>
               </Card>
             </Col>

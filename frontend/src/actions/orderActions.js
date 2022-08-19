@@ -141,3 +141,34 @@ export const payOrder = createAsyncThunk(
     }
   }
 );
+
+export const deliverOrder = createAsyncThunk(
+  'DELIVER_ORDER',
+  async (orderID, { rejectWithValue }) => {
+    const { token } = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/orders/${orderID}/deliver`,
+        {},
+        config
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);

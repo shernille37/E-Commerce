@@ -6,6 +6,7 @@ import {
   payOrder,
   getMyOrders,
   getAllOrders,
+  deliverOrder,
 } from '../actions/orderActions';
 
 const initialState = {
@@ -20,6 +21,9 @@ const orderReducer = createSlice({
   reducers: {
     resetSuccessOrder: (state, action) => {
       state.successOrder = false;
+    },
+    resetSuccessDeliver: (state, action) => {
+      state.successDeliver = false;
     },
   },
   extraReducers(builder) {
@@ -89,6 +93,23 @@ const orderReducer = createSlice({
         state.error = action.payload;
       })
 
+      // DELIVER ORDER
+      .addCase(deliverOrder.pending, (state, action) => {
+        state.error = null;
+        state.successDeliver = false;
+        state.loading = true;
+      })
+      .addCase(deliverOrder.fulfilled, (state, action) => {
+        state.error = null;
+        state.successDeliver = true;
+        state.loading = false;
+      })
+      .addCase(deliverOrder.rejected, (state, action) => {
+        state.error = action.payload;
+        state.successDeliver = false;
+        state.loading = false;
+      })
+
       // GET MY ORDERS
       .addCase(getMyOrders.pending, (state, action) => {
         state.error = null;
@@ -107,4 +128,4 @@ const orderReducer = createSlice({
 
 export const orderSlice = orderReducer.reducer;
 
-export const { resetSuccessOrder } = orderReducer.actions;
+export const { resetSuccessOrder, resetSuccessDeliver } = orderReducer.actions;
