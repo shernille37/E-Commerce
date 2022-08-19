@@ -5,8 +5,8 @@ import {
   createProduct,
   deleteProduct,
   updateProduct,
+  createProductReview,
 } from '../actions/productActions';
-import { logout } from '../actions/userActions';
 
 const productsInitialState = {
   products: [],
@@ -72,6 +72,12 @@ export const productDetailsReducer = createSlice({
     resetUpdateSuccess: (state, action) => {
       state.successUpdate = false;
     },
+    resetReviewSuccess: (state, action) => {
+      state.successReview = false;
+    },
+    resetErrorReview: (state, action) => {
+      state.errorReview = null;
+    },
   },
   extraReducers(builder) {
     builder
@@ -90,6 +96,8 @@ export const productDetailsReducer = createSlice({
         state.successCreate = false;
         state.loadingCreate = false;
         state.error = action.payload;
+
+        // GET PRODUCT DETAILS
       })
       .addCase(listProductDetails.pending, (state, action) => {
         state.error = null;
@@ -103,6 +111,23 @@ export const productDetailsReducer = createSlice({
       .addCase(listProductDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // CREATE PRODUCT REVIEWS
+      .addCase(createProductReview.pending, (state, action) => {
+        state.errorReview = null;
+        state.loadingReview = true;
+        state.successReview = false;
+      })
+      .addCase(createProductReview.fulfilled, (state, action) => {
+        state.errorReview = null;
+        state.loadingReview = false;
+        state.successReview = true;
+      })
+      .addCase(createProductReview.rejected, (state, action) => {
+        state.errorReview = action.payload;
+        state.loadingReview = false;
+        state.successReview = false;
       })
 
       // UPDATE PRODUCT
@@ -129,5 +154,9 @@ export const productDetailsSlice = productDetailsReducer.reducer;
 
 export const { resetDeleteSuccess } = productsReducer.actions;
 
-export const { resetCreateSuccess, resetUpdateSuccess } =
-  productDetailsReducer.actions;
+export const {
+  resetCreateSuccess,
+  resetUpdateSuccess,
+  resetReviewSuccess,
+  resetErrorReview,
+} = productDetailsReducer.actions;
