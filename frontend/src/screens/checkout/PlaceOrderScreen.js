@@ -24,7 +24,7 @@ const PlaceOrderScreen = () => {
   } = cart;
 
   const order = useSelector((state) => state.order);
-  const { order: createdOrder, successOrder, error } = order;
+  const { order: createdOrder, successOrder, loading, error } = order;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const PlaceOrderScreen = () => {
             <span style={{ textDecoration: 'underline' }}>Go Back</span>
           </Link>
         </Message>
-      ) : !shippingAddress || !paymentMethod ? (
+      ) : loading || !shippingAddress || !paymentMethod ? (
         <Loader />
       ) : (
         <>
