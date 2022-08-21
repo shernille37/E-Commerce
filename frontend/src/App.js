@@ -54,6 +54,11 @@ function App() {
                 <Route path='*' element={<NotFound />} />
                 <Route path='/' element={<HomeScreen />}>
                   <Route path='search/:keyword' element={<HomeScreen />} />
+                  <Route path='page/:pageNumber' element={<HomeScreen />} />
+                  <Route
+                    path='search/:keyword/page/:pageNumber'
+                    element={<HomeScreen />}
+                  />
                 </Route>
                 <Route path='/product/:id' element={<ProductScreen />} />
                 <Route path='/register' element={<RegisterScreen />} />
@@ -68,7 +73,9 @@ function App() {
                 <Route
                   path='/admin/productlist'
                   element={<ProductListScreen />}
-                />
+                >
+                  <Route path=':pageNumber' element={<ProductListScreen />} />
+                </Route>
 
                 <Route
                   path='/admin/productlist/:id/edit'

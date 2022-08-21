@@ -1,5 +1,5 @@
 import React, { Children, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,35 +16,46 @@ import {
   resetUpdateSuccess,
   resetCreateSuccess,
 } from '../../reducers/productReducers';
+import Paginate from '../../components/Paginate';
 
 const ProductListScreen = () => {
   const user = useSelector((state) => state.user);
   const { authUser } = user;
 
   const productList = useSelector((state) => state.productList);
-  const { products, loading, error, loadingDelete, successDelete } =
-    productList;
+  const {
+    products,
+    pages,
+    page,
+    loading,
+    error,
+    loadingDelete,
+    successDelete,
+  } = productList;
 
   const productDetails = useSelector((state) => state.productDetails);
   const { product, successCreate, successUpdate } = productDetails;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
+
+  const pageNumber = params.pageNumber || 1;
 
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
     } else {
-      dispatch(listProducts());
+      dispatch(listProducts({ keyword: '', pageNumber }));
     }
-  }, [dispatch, authUser]);
+  }, [dispatch, authUser, pageNumber]);
 
   useEffect(() => {
     if (successCreate) {
       dispatch(resetCreateSuccess());
       navigate(`${product._id}/edit`);
     } else if (successDelete) {
-      dispatch(listProducts());
+      dispatch(listProducts({ keyword: '', pageNumber }));
     }
 
     if (successDelete || successUpdate) {
@@ -144,6 +155,12 @@ const ProductListScreen = () => {
               ))}
             </tbody>
           </Table>
+          <Paginate
+            pages={pages}
+            page={page}
+            keyword={''}
+            isAdmin={authUser.isAdmin}
+          />
         </>
       )}
     </>

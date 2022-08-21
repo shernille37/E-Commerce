@@ -10,14 +10,14 @@ import {
 
 const productsInitialState = {
   products: [],
-  loading: false,
+  page: 1,
+  pages: 1,
 };
 
 const productDetailsInitialState = {
   product: {
     reviews: [],
   },
-  loading: false,
 };
 
 export const productsReducer = createSlice({
@@ -36,10 +36,15 @@ export const productsReducer = createSlice({
         state.error = null;
         state.loading = true;
       })
-      .addCase(listProducts.fulfilled, (state, action) => {
-        state.loading = false;
-        state.products = action.payload;
-      })
+      .addCase(
+        listProducts.fulfilled,
+        (state, { payload: { products, page, pages } }) => {
+          state.loading = false;
+          state.products = products;
+          state.page = page;
+          state.pages = pages;
+        }
+      )
       .addCase(listProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
