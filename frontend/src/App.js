@@ -52,7 +52,9 @@ function App() {
             <Container>
               <Routes>
                 <Route path='*' element={<NotFound />} />
-                <Route path='/' element={<HomeScreen />} />
+                <Route path='/' element={<HomeScreen />}>
+                  <Route path='search/:keyword' element={<HomeScreen />} />
+                </Route>
                 <Route path='/product/:id' element={<ProductScreen />} />
                 <Route path='/register' element={<RegisterScreen />} />
                 <Route path='/login' element={<LoginScreen />} />
