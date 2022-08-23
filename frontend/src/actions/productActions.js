@@ -35,6 +35,22 @@ export const listProductDetails = createAsyncThunk(
   }
 );
 
+export const getTopProducts = createAsyncThunk(
+  'GET_TOP_PRODUCTS',
+  async (x, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`/api/products/top`);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 export const createProduct = createAsyncThunk(
   'CREATE_PRODUCT',
   async (id, { rejectWithValue }) => {

@@ -6,10 +6,12 @@ import {
   deleteProduct,
   updateProduct,
   createProductReview,
+  getTopProducts,
 } from '../actions/productActions';
 
 const productsInitialState = {
   products: [],
+  topProducts: [],
   page: 1,
   pages: 1,
 };
@@ -48,6 +50,21 @@ export const productsReducer = createSlice({
       .addCase(listProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // GET TOP PRODUCTS
+
+      .addCase(getTopProducts.pending, (state, action) => {
+        state.loadingTopProducts = true;
+        state.errorTopProducts = null;
+      })
+      .addCase(getTopProducts.fulfilled, (state, action) => {
+        state.loadingTopProducts = false;
+        state.topProducts = action.payload;
+      })
+      .addCase(getTopProducts.rejected, (state, action) => {
+        state.loadingTopProducts = false;
+        state.errorTopProducts = action.payload;
       })
 
       // DELETE PRODUCT

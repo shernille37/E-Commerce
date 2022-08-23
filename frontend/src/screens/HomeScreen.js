@@ -3,10 +3,11 @@ import { Row, Col } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Product from '../components/Product';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { listProducts } from '../actions/productActions';
 import Paginate from '../components/Paginate';
+import ProductCarousel from '../components/ProductCarousel';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,13 @@ const HomeScreen = () => {
   }, [dispatch, keyword, pageNumber]);
   return (
     <>
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to='/' className='btn btn-light'>
+          Go Back
+        </Link>
+      )}
       <h1>Latest Products</h1>
 
       {loading ? (
