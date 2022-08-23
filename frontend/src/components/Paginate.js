@@ -17,7 +17,9 @@ const Paginate = ({ pages, page, isAdmin = false, keyword }) => {
                 : `/admin/productlist/${p + 1}`
             }
           >
-            <Pagination.Item active={p + 1 === page}>{p + 1}</Pagination.Item>
+            <Pagination.Item active={p + 1 === page} activeLabel=''>
+              {p + 1}
+            </Pagination.Item>
           </LinkContainer>
         ))}
       </Pagination>
