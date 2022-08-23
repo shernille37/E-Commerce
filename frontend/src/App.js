@@ -23,6 +23,8 @@ import ProductListScreen from './screens/admin/ProductListScreen';
 import ProductEditScreen from './screens/admin/ProductEditScreen';
 import CheckOut from './screens/checkout/CheckOut';
 import OrderListScreen from './screens/admin/OrderListScreen';
+import Breadcrumbs from './components/Breadcrumbs';
+import AdminScreen from './screens/admin/AdminScreen';
 
 function App() {
   const [clientID, setClientID] = useState(null);
@@ -65,17 +67,20 @@ function App() {
                 <Route path='/login' element={<LoginScreen />} />
                 <Route path='/profile' element={<ProfileScreen />} />
                 <Route path='/cart' element={<CartScreen />} />
-                <Route path='/admin/userlist' element={<UserListScreen />} />
+
+                <Route path='/admin' element={<AdminScreen />}>
+                  <Route path='userlist' element={<UserListScreen />} />
+
+                  <Route path='productlist' element={<ProductListScreen />}>
+                    <Route path=':pageNumber' element={<ProductListScreen />} />
+                  </Route>
+                  <Route path='orderlist' element={<OrderListScreen />} />
+                </Route>
+
                 <Route
                   path='/admin/userlist/:id/edit'
                   element={<UserEditScreen />}
                 />
-                <Route
-                  path='/admin/productlist'
-                  element={<ProductListScreen />}
-                >
-                  <Route path=':pageNumber' element={<ProductListScreen />} />
-                </Route>
 
                 <Route
                   path='/admin/productlist/:id/edit'
@@ -83,7 +88,6 @@ function App() {
                 />
 
                 <Route path='/order/:id' element={<OrderScreen />} />
-                <Route path='/admin/orderlist' element={<OrderListScreen />} />
 
                 <Route path='/checkout' element={<CheckOut />}>
                   <Route path='shipping' element={<ShippingScreen />} />
