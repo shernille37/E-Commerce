@@ -14,6 +14,7 @@ const router = express.Router();
 
 router.route('/').get(getProducts).post(protect, isAdmin, createProduct);
 router.get('/top', getTopProducts);
+
 router
   .route('/:id')
   .get(getProductById)

@@ -3,11 +3,12 @@ import { Row, Col } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Product from '../components/Product';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { listProducts } from '../actions/productActions';
 import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
+import SortBox from '../components/utils/SortBox';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -15,12 +16,15 @@ const HomeScreen = () => {
   const { loading, error, products, pages, page } = productList;
 
   const params = useParams();
+
   const keyword = params.keyword || '';
   const pageNumber = params.pageNumber || 1;
+  const sort = params.sort || '';
 
   useEffect(() => {
-    dispatch(listProducts({ keyword, pageNumber }));
-  }, [dispatch, keyword, pageNumber]);
+    dispatch(listProducts({ keyword, pageNumber, sort }));
+  }, [dispatch, keyword, pageNumber, sort]);
+
   return (
     <>
       {!keyword ? (
@@ -30,7 +34,14 @@ const HomeScreen = () => {
           Go Back
         </Link>
       )}
-      <h1>Latest Products</h1>
+      <Row>
+        <Col>
+          <h1>Latest Products</h1>
+        </Col>
+        <Col className='text-right'>
+          <SortBox />
+        </Col>
+      </Row>
 
       {loading ? (
         <Loader />

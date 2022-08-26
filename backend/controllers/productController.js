@@ -7,6 +7,7 @@ import Product from '../models/productModel.js';
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10;
   const page = Number(req.query.pageNumber) || 1;
+  const sort = req.query.sort;
 
   const keyword = req.query.keyword
     ? {
@@ -18,9 +19,15 @@ const getProducts = asyncHandler(async (req, res) => {
     : {};
 
   const count = await Product.countDocuments({ ...keyword });
-  const products = await Product.find({ ...keyword })
+  let products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
+
+  if (sort) {
+    products = await Product.find({ ...keyword }).sort({
+      price: sort === 'asc' ? 1 : -1,
+    });
+  }
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 

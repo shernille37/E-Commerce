@@ -9,6 +9,7 @@ import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import ZoomImage from '../components/ZoomImage';
+import ScrollToTop from '../components/utils/ScrollToTop';
 import {
   resetErrorReview,
   resetReviewSuccess,
@@ -58,6 +59,7 @@ const ProductScreen = () => {
 
   return (
     <>
+      <ScrollToTop />
       <Button
         className='btn btn-light my-3'
         type='button'

@@ -8,6 +8,10 @@ main {
   min-height: 80vh;
 }
 
+i {
+  letter-spacing: 2px;
+}
+
 h3 {
   padding: 1rem 0;
 }

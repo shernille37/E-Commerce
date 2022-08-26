@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap';
 
 import Header from './components/Header';
 import NotFound from './components/NotFound';
-import ScrollToTop from './components/utils/ScrollToTop';
+
 import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
@@ -50,16 +50,17 @@ function App() {
       >
         <Router>
           <Header />
-          <ScrollToTop />
+
           <main className='py-3'>
             <Container>
               <Routes>
                 <Route path='*' element={<NotFound />} />
                 <Route path='/' element={<HomeScreen />}>
                   <Route path='search/:keyword' element={<HomeScreen />} />
+                  <Route path='sort/:sort' element={<HomeScreen />} />
                   <Route path='page/:pageNumber' element={<HomeScreen />} />
                   <Route
-                    path='search/:keyword/page/:pageNumber'
+                    path='search/:keyword/page/:pageNumber/sort/:sort'
                     element={<HomeScreen />}
                   />
                 </Route>
