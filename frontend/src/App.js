@@ -5,11 +5,12 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { Container } from 'react-bootstrap';
 
 import Header from './components/Header';
+import NotFound from './components/NotFound';
+import ScrollToTop from './components/utils/ScrollToTop';
 import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
-import NotFound from './components/NotFound';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -23,7 +24,6 @@ import ProductListScreen from './screens/admin/ProductListScreen';
 import ProductEditScreen from './screens/admin/ProductEditScreen';
 import CheckOut from './screens/checkout/CheckOut';
 import OrderListScreen from './screens/admin/OrderListScreen';
-import Breadcrumbs from './components/Breadcrumbs';
 import AdminScreen from './screens/admin/AdminScreen';
 
 function App() {
@@ -50,6 +50,7 @@ function App() {
       >
         <Router>
           <Header />
+          <ScrollToTop />
           <main className='py-3'>
             <Container>
               <Routes>

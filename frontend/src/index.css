@@ -74,7 +74,6 @@ textarea {
 }
 
 .breadcrumb__item {
-  height: 100%;
   background-color: white;
   color: #252525;
   font-family: 'Oswald', sans-serif;
@@ -86,36 +85,45 @@ textarea {
   font-size: 16px;
   transform: skew(-21deg);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-  margin: 5px;
-  padding: 20px;
+  margin: 0 20px;
+  padding: 10px 20px !important;
   cursor: pointer;
 }
 
+.breadcrumb__item.active {
+  background: var(--success) !important;
+}
+
+.breadcrumb__item.active .breadcrumb__title {
+  color: #fff !important;
+}
+
 .breadcrumb__item:hover {
-  background: #490099;
+  background: var(--success);
+}
+
+.breadcrumb__item:hover .breadcrumb__title {
+  color: #fff !important;
 }
 
 .breadcrumb__inner {
   display: flex;
   flex-direction: column;
+
   margin: auto;
   z-index: 2;
   transform: skew(21deg);
 }
 
-.breadcrumb__inner .active {
-  color: #4bbf73 !important;
+.breadcrumb__inner p {
+  margin-bottom: 0;
 }
 
 .breadcrumb__title {
   color: #252525 !important;
-  margin-top: -20px;
+
   font-size: 16px;
   overflow: hidden;
-}
-
-.breadcrumb__title:hover {
-  color: #fff !important;
 }
 
 @media (max-width: 900px) {
@@ -127,7 +135,7 @@ textarea {
     font-size: 11px;
   }
   .breadcrumb__item {
-    padding: 20px;
+    padding: 0px;
   }
 }
 
@@ -136,7 +144,8 @@ textarea {
     height: 30px;
   }
   .breadcrumb__item {
-    padding: 20px;
+    margin: 5px;
+    padding: 0px;
   }
 }
 @media (max-width: 900px) {
