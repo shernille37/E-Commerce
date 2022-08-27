@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -28,6 +28,11 @@ const UserListScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [show, setShow] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+
+  const handleClose = () => setShow(false);
+
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
@@ -37,7 +42,7 @@ const UserListScreen = () => {
   }, [dispatch, authUser]);
 
   useEffect(() => {
-    if (successUpdate) dispatch(getAllUsers());
+    if (successUpdate || successDelete) dispatch(getAllUsers());
     if (successDelete || successUpdate) {
       setTimeout(() => {
         dispatch(resetDeleteSuccess());
@@ -46,10 +51,10 @@ const UserListScreen = () => {
     }
   }, [dispatch, successDelete, successUpdate]);
 
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure?')) {
-      dispatch(deleteUser(id));
-    }
+  const deleteHandler = () => {
+    dispatch(deleteUser(deleteId));
+    setShow(false);
+    setDeleteId('');
   };
 
   return (
@@ -117,7 +122,10 @@ const UserListScreen = () => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(user._id)}
+                      onClick={() => {
+                        setShow(true);
+                        setDeleteId(user._id);
+                      }}
                     >
                       <i className='fas fa-trash'></i>
                     </Button>
@@ -126,6 +134,22 @@ const UserListScreen = () => {
               ))}
             </tbody>
           </Table>
+
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header>Delete User</Modal.Header>
+            <Modal.Body>
+              {' '}
+              <strong>Are you sure?</strong>{' '}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant='secondary' onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant='danger' onClick={deleteHandler}>
+                Delete User
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
           <Outlet />
         </>
