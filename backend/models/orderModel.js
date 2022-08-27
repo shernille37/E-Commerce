@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Product from './productModel.js';
 
 const orderSchema = mongoose.Schema(
   {
@@ -89,6 +90,17 @@ const orderSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+orderSchema.post('save', function (doc, next) {
+  if (doc.isPaid && !doc.isDelivered) {
+    doc.orderItems.map(async (item) => {
+      const product = await Product.findById(item.product);
+      product.countInStock--;
+      await product.save();
+    });
+    next();
+  } else next();
+});
 
 const Order = mongoose.model('Order', orderSchema);
 

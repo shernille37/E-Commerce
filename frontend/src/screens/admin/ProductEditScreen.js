@@ -34,8 +34,7 @@ const ProductEditScreen = () => {
   const { authUser } = user;
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { product, loading, error, successUpdate, loadingUpdate } =
-    productDetails;
+  const { product, loading, error } = productDetails;
 
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {

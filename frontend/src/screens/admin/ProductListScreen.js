@@ -1,7 +1,7 @@
-import React, { Children, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Outlet } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Row, Col } from 'react-bootstrap';
+import { Table, Button, Row, Col, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -44,6 +44,11 @@ const ProductListScreen = () => {
 
   const pageNumber = params.pageNumber;
 
+  const [show, setShow] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+
+  const handleClose = () => setShow(false);
+
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
@@ -56,6 +61,7 @@ const ProductListScreen = () => {
     if (successCreate) {
       dispatch(resetCreateSuccess());
       navigate(`${product._id}/edit`);
+      dispatch(listProducts({ keyword: '', pageNumber }));
     } else if (successDelete || successUpdate) {
       dispatch(listProducts({ keyword: '', pageNumber }));
     }
@@ -70,10 +76,9 @@ const ProductListScreen = () => {
     }
   }, [dispatch, successDelete, successCreate, successUpdate]);
 
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure?')) {
-      dispatch(deleteProduct(id));
-    }
+  const deleteHandler = () => {
+    dispatch(deleteProduct(deleteId));
+    setShow(false);
   };
 
   const createProductHandler = () => {
@@ -143,11 +148,13 @@ const ProductListScreen = () => {
                         <i className='fas fa-edit'></i>
                       </Button>
                     </LinkContainer>
-
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(product._id)}
+                      onClick={() => {
+                        setDeleteId(product._id);
+                        setShow(true);
+                      }}
                     >
                       <i className='fas fa-trash'></i>
                     </Button>
@@ -156,11 +163,28 @@ const ProductListScreen = () => {
               ))}
             </tbody>
           </Table>
+
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header>Delete Product</Modal.Header>
+            <Modal.Body>
+              {' '}
+              <strong>Are you sure?</strong>{' '}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant='secondary' onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant='danger' onClick={deleteHandler}>
+                Delete Product
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
           <Paginate
             pages={pages}
             page={page}
             keyword={''}
-            isAdmin={authUser.isAdmin}
+            isAdmin={authUser && authUser.isAdmin}
           />
         </>
       )}

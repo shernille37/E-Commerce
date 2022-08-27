@@ -44,10 +44,12 @@ const UserListScreen = () => {
   useEffect(() => {
     if (successUpdate || successDelete) dispatch(getAllUsers());
     if (successDelete || successUpdate) {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         dispatch(resetDeleteSuccess());
         dispatch(resetUpdateSuccess());
       }, 3000);
+
+      return () => clearTimeout(timeout);
     }
   }, [dispatch, successDelete, successUpdate]);
 
