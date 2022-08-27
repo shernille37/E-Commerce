@@ -1,5 +1,5 @@
 import React, { Children, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Outlet } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ import {
   resetUpdateSuccess,
   resetCreateSuccess,
 } from '../../reducers/productReducers';
-import Paginate from '../../components/Paginate';
+import Paginate from '../../components/utils/Paginate';
 
 const ProductListScreen = () => {
   const user = useSelector((state) => state.user);
@@ -34,13 +34,15 @@ const ProductListScreen = () => {
   } = productList;
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { product, successCreate, successUpdate } = productDetails;
+  const { product, successCreate, successUpdate, loadingUpdate } =
+    productDetails;
 
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const params = useParams();
 
-  const pageNumber = params.pageNumber || 1;
+  const pageNumber = params.pageNumber;
 
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
@@ -54,7 +56,7 @@ const ProductListScreen = () => {
     if (successCreate) {
       dispatch(resetCreateSuccess());
       navigate(`${product._id}/edit`);
-    } else if (successDelete) {
+    } else if (successDelete || successUpdate) {
       dispatch(listProducts({ keyword: '', pageNumber }));
     }
 
@@ -63,6 +65,8 @@ const ProductListScreen = () => {
         dispatch(resetDeleteSuccess());
         dispatch(resetUpdateSuccess());
       }, 3000);
+
+      return () => clearTimeout(timeout);
     }
   }, [dispatch, successDelete, successCreate, successUpdate]);
 
@@ -85,7 +89,6 @@ const ProductListScreen = () => {
           </Button>
         </Col>
       </Row>
-
       {loading ? (
         <Loader />
       ) : error ? (
@@ -95,6 +98,7 @@ const ProductListScreen = () => {
       ) : (
         <>
           {}
+          {loadingUpdate && <Message variant='info'>Updating</Message>}
           {loadingDelete && <Message variant='info'>Deleting...</Message>}
           {successUpdate && (
             <Message variant='success'>Product Updated</Message>
@@ -160,6 +164,8 @@ const ProductListScreen = () => {
           />
         </>
       )}
+
+      {!pageNumber && <Outlet />}
     </>
   );
 };

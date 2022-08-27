@@ -6,7 +6,7 @@ import Product from '../components/Product';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { listProducts } from '../actions/productActions';
-import Paginate from '../components/Paginate';
+import Paginate from '../components/utils/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import SortBox from '../components/utils/SortBox';
 

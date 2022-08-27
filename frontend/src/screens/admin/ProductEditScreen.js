@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Modal } from 'react-bootstrap';
 import FormContainer from '../../components/FormContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
@@ -22,6 +22,9 @@ const ProductEditScreen = () => {
 
   const [uploading, setUploading] = useState(false);
 
+  const [show, setShow] = useState(true);
+  const handleClose = () => setShow(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ const ProductEditScreen = () => {
   const { authUser } = user;
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { product, loading, error, loadingUpdate, successUpdate } =
+  const { product, loading, error, successUpdate, loadingUpdate } =
     productDetails;
 
   useEffect(() => {
@@ -49,12 +52,6 @@ const ProductEditScreen = () => {
       setDescription(product.description);
     }
   }, [dispatch, authUser, product]);
-
-  useEffect(() => {
-    if (successUpdate) {
-      navigate(-1);
-    }
-  }, [successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -98,22 +95,18 @@ const ProductEditScreen = () => {
   };
 
   return (
-    <>
-      <Link to='/admin/productlist' className='btn btn-light my-3'>
-        Go Back
-      </Link>
-
-      <FormContainer>
-        <h1>Edit Product</h1>
-
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant='danger'>{error}</Message>
-        ) : (
-          <>
-            {loadingUpdate && <Message variant={'info'}>Updating...</Message>}
-            <Form onSubmit={submitHandler}>
+    <Modal show={show} onExited={() => navigate(-1)} onHide={handleClose}>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant='danger'>{error}</Message>
+      ) : (
+        <>
+          <Modal.Header>
+            <Modal.Title>Update Product</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={submitHandler} id='updateProduct'>
               <Form.Group controlId='name'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -188,21 +181,30 @@ const ProductEditScreen = () => {
               <Form.Group controlId='description'>
                 <Form.Label>Description</Form.Label>
                 <Form.Control
-                  type='text'
+                  as='textarea'
                   placeholder='Enter description'
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-
-              <Button type='submit' variant='primary'>
-                Update
-              </Button>
             </Form>
-          </>
-        )}
-      </FormContainer>
-    </>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={handleClose}>
+              Close
+            </Button>
+            <Button
+              variant='primary'
+              form='updateProduct'
+              type='submit'
+              onClick={handleClose}
+            >
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </>
+      )}
+    </Modal>
   );
 };
 

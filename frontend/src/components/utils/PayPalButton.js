@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { payOrder } from '../actions/orderActions';
+import { payOrder } from '../../actions/orderActions';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
-import Loader from './Loader';
+import Loader from '../Loader';
 
 const PayPalButton = ({ currency, amount }) => {
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();

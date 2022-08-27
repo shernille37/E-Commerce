@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,11 +13,13 @@ import {
 
 const UserListScreen = () => {
   const user = useSelector((state) => state.user);
+
   const {
     authUser,
     userList,
     loading,
     error,
+    loadingUpdate,
     successDelete,
     loadingDelete,
     successUpdate,
@@ -35,13 +37,14 @@ const UserListScreen = () => {
   }, [dispatch, authUser]);
 
   useEffect(() => {
+    if (successUpdate) dispatch(getAllUsers());
     if (successDelete || successUpdate) {
       setTimeout(() => {
         dispatch(resetDeleteSuccess());
         dispatch(resetUpdateSuccess());
       }, 3000);
     }
-  }, [dispatch, authUser, successDelete, successUpdate]);
+  }, [dispatch, successDelete, successUpdate]);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
@@ -60,6 +63,7 @@ const UserListScreen = () => {
       ) : (
         <>
           {}
+          {loadingUpdate && <Message variant='info'>Updating</Message>}
           {loadingDelete && <Message variant='info'>Deleting...</Message>}
           {successUpdate && (
             <Message variant='success'>Profile Updated</Message>
@@ -122,6 +126,8 @@ const UserListScreen = () => {
               ))}
             </tbody>
           </Table>
+
+          <Outlet />
         </>
       )}
     </>

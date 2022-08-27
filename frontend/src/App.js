@@ -79,23 +79,16 @@ function App() {
                 <Route path='/cart' element={<CartScreen />} />
 
                 <Route path='/admin' element={<AdminScreen />}>
-                  <Route path='userlist' element={<UserListScreen />} />
+                  <Route path='userlist' element={<UserListScreen />}>
+                    <Route path=':id/edit' element={<UserEditScreen />} />
+                  </Route>
 
                   <Route path='productlist' element={<ProductListScreen />}>
                     <Route path=':pageNumber' element={<ProductListScreen />} />
+                    <Route path=':id/edit' element={<ProductEditScreen />} />
                   </Route>
                   <Route path='orderlist' element={<OrderListScreen />} />
                 </Route>
-
-                <Route
-                  path='/admin/userlist/:id/edit'
-                  element={<UserEditScreen />}
-                />
-
-                <Route
-                  path='/admin/productlist/:id/edit'
-                  element={<ProductEditScreen />}
-                />
 
                 <Route path='/order/:id' element={<OrderScreen />} />
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PayPalButton from '../components/PayPalButton';
+import PayPalButton from '../components/utils/PayPalButton';
 import dateFormat from 'dateformat';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import Message from '../components/Message';
@@ -49,6 +49,13 @@ const OrderScreen = () => {
 
   return (
     <>
+      <Button
+        className='btn btn-light my-3'
+        type='button'
+        onClick={() => navigate(-1)}
+      >
+        Go Back
+      </Button>
       {loading || !orderDetails ? (
         <Loader />
       ) : error ? (

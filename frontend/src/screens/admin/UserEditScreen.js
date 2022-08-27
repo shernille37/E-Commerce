@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import FormContainer from '../../components/FormContainer';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Form, Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -12,20 +11,17 @@ const UserEditScreen = () => {
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const [show, setShow] = useState(true);
+
+  const handleClose = () => setShow(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { id } = useParams();
 
   const user = useSelector((state) => state.user);
-  const {
-    userDetails,
-    authUser,
-    loading,
-    error,
-    successUpdate,
-    loadingUpdate,
-  } = user;
+  const { userDetails, authUser, loading, error } = user;
 
   useEffect(() => {
     if (!authUser) {
@@ -37,10 +33,6 @@ const UserEditScreen = () => {
       setEmail(userDetails.email);
       setIsAdmin(userDetails.isAdmin);
     }
-
-    if (successUpdate) {
-      navigate(-1);
-    }
   }, [dispatch, authUser, userDetails]);
 
   const submitHandler = (e) => {
@@ -50,22 +42,18 @@ const UserEditScreen = () => {
   };
 
   return (
-    <>
-      <Link to='/admin/userlist' className='btn btn-light my-3'>
-        Go Back
-      </Link>
-
-      <FormContainer>
-        <h1>Edit User</h1>
-
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant='danger'>{error}</Message>
-        ) : (
-          <>
-            {loadingUpdate && <Message variant='info'>Updating...</Message>}
-            <Form onSubmit={submitHandler}>
+    <Modal show={show} onExited={() => navigate(-1)} onHide={handleClose}>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant='danger'>{error}</Message>
+      ) : (
+        <>
+          <Modal.Header>
+            <Modal.Title>Update User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={submitHandler} id='updateUser'>
               <Form.Group controlId='name'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -96,15 +84,24 @@ const UserEditScreen = () => {
                   onChange={(e) => setIsAdmin(e.target.checked)}
                 ></Form.Check>
               </Form.Group>
-
-              <Button className='mt-2' type='submit' variant='primary'>
-                Update
-              </Button>
             </Form>
-          </>
-        )}
-      </FormContainer>
-    </>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={handleClose}>
+              Close
+            </Button>
+            <Button
+              variant='primary'
+              form='updateUser'
+              type='submit'
+              onClick={handleClose}
+            >
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </>
+      )}
+    </Modal>
   );
 };
 

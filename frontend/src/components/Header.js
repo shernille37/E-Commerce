@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import SearchBox from './SearchBox';
+import SearchBox from './utils/SearchBox';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../actions/userActions';
-import { getProfile } from '../actions/userActions';
 
 const Header = () => {
   const dispatch = useDispatch();
