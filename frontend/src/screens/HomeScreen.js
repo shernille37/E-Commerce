@@ -56,7 +56,7 @@ const HomeScreen = () => {
               </Col>
             ))}
           </Row>
-          <Paginate pages={pages} page={page} keyword={keyword} />
+          <Paginate pages={pages} page={page} keyword={keyword} sort={sort} />
         </>
       )}
     </>

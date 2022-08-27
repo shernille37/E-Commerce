@@ -60,6 +60,14 @@ function App() {
                   <Route path='sort/:sort' element={<HomeScreen />} />
                   <Route path='page/:pageNumber' element={<HomeScreen />} />
                   <Route
+                    path='search/:keyword/page/:pageNumber'
+                    element={<HomeScreen />}
+                  />
+                  <Route
+                    path='search/:keyword/sort/:sort'
+                    element={<HomeScreen />}
+                  />
+                  <Route
                     path='search/:keyword/page/:pageNumber/sort/:sort'
                     element={<HomeScreen />}
                   />
