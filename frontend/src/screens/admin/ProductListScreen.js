@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Outlet } from 'react-router-dom';
+import { useSearchParams, useNavigate, Outlet } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,9 +40,9 @@ const ProductListScreen = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  const params = useParams();
+  const [params] = useSearchParams();
 
-  const pageNumber = params.pageNumber;
+  const pageNumber = params.get('page') || 1;
 
   const [show, setShow] = useState(false);
   const [deleteId, setDeleteId] = useState('');
@@ -53,17 +53,17 @@ const ProductListScreen = () => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
     } else {
-      dispatch(listProducts({ keyword: '', pageNumber }));
+      dispatch(listProducts({ search: '', pageNumber }));
     }
-  }, [dispatch, authUser, pageNumber]);
+  }, [dispatch, authUser, pageNumber, params]);
 
   useEffect(() => {
     if (successCreate) {
       dispatch(resetCreateSuccess());
       navigate(`${product._id}/edit`);
-      dispatch(listProducts({ keyword: '', pageNumber }));
+      dispatch(listProducts({ search: '', pageNumber }));
     } else if (successDelete || successUpdate) {
-      dispatch(listProducts({ keyword: '', pageNumber }));
+      dispatch(listProducts({ search: '', pageNumber }));
     }
 
     if (successDelete || successUpdate) {
@@ -189,7 +189,7 @@ const ProductListScreen = () => {
         </>
       )}
 
-      {!pageNumber && <Outlet />}
+      <Outlet />
     </>
   );
 };

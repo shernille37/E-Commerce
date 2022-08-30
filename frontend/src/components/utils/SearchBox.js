@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const SearchBox = () => {
   const [keyword, setKeyword] = useState('');
+  const [params, setParams] = useSearchParams();
 
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (keyword.trim()) {
-      navigate(`/search/${keyword}`);
+      navigate(`/?search=${keyword}`);
     } else {
       navigate('/');
     }
+    setKeyword('');
   };
 
   return (
@@ -21,6 +23,7 @@ const SearchBox = () => {
       <Form.Control
         type='text'
         name='q'
+        value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         placeholder='Search Products...'
         className='mr-sm-2 ml-sm-5'

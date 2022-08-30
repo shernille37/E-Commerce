@@ -55,23 +55,8 @@ function App() {
             <Container>
               <Routes>
                 <Route path='*' element={<NotFound />} />
-                <Route path='/' element={<HomeScreen />}>
-                  <Route path='search/:keyword' element={<HomeScreen />} />
-                  <Route path='sort/:sort' element={<HomeScreen />} />
-                  <Route path='page/:pageNumber' element={<HomeScreen />} />
-                  <Route
-                    path='search/:keyword/page/:pageNumber'
-                    element={<HomeScreen />}
-                  />
-                  <Route
-                    path='search/:keyword/sort/:sort'
-                    element={<HomeScreen />}
-                  />
-                  <Route
-                    path='search/:keyword/page/:pageNumber/sort/:sort'
-                    element={<HomeScreen />}
-                  />
-                </Route>
+                <Route path='/' element={<HomeScreen />} />
+
                 <Route path='/product/:id' element={<ProductScreen />} />
                 <Route path='/register' element={<RegisterScreen />} />
                 <Route path='/login' element={<LoginScreen />} />
@@ -84,7 +69,6 @@ function App() {
                   </Route>
 
                   <Route path='productlist' element={<ProductListScreen />}>
-                    <Route path=':pageNumber' element={<ProductListScreen />} />
                     <Route path=':id/edit' element={<ProductEditScreen />} />
                   </Route>
                   <Route path='orderlist' element={<OrderListScreen />} />

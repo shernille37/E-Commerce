@@ -12,11 +12,11 @@ const Paginate = ({ pages, page, isAdmin = false, keyword, sort }) => {
             to={
               !isAdmin
                 ? keyword && sort
-                  ? `/search/${keyword}/page/${p + 1}/sort/${sort}`
+                  ? `?search=${keyword}&page=${p + 1}&sort=${sort}`
                   : keyword
-                  ? `search/${keyword}/page/${p + 1}`
-                  : `/page/${p + 1}`
-                : `/admin/productlist/${p + 1}`
+                  ? `?search=${keyword}&page=${p + 1}`
+                  : `?page=${p + 1}`
+                : `/admin/productlist/?page=${p + 1}`
             }
           >
             <Pagination.Item active={p + 1 === page} activeLabel=''>

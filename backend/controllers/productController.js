@@ -6,20 +6,20 @@ import Product from '../models/productModel.js';
 // @access PUBLIC
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10;
-  const page = Number(req.query.pageNumber) || 1;
-  const sort = req.query.sort;
+  const page = Number(req.query.page) || 1;
+  const sort = req.query.sort || '';
 
-  const keyword = req.query.keyword
+  const search = req.query.search
     ? {
         name: {
-          $regex: req.query.keyword,
+          $regex: req.query.search,
           $options: 'i',
         },
       }
     : {};
 
-  const count = await Product.countDocuments({ ...keyword });
-  let products = await Product.find({ ...keyword })
+  const count = await Product.countDocuments({ ...search });
+  let products = await Product.find({ ...search })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 

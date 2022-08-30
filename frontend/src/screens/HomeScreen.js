@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Product from '../components/Product';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { listProducts } from '../actions/productActions';
 import Paginate from '../components/utils/Paginate';
@@ -15,19 +15,18 @@ const HomeScreen = () => {
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, pages, page } = productList;
 
-  const params = useParams();
-
-  const keyword = params.keyword || '';
-  const pageNumber = params.pageNumber || 1;
-  const sort = params.sort || '';
+  const [params, setParams] = useSearchParams();
+  const search = params.get('search') || '';
+  const pageNumber = params.get('page') || 1;
+  const sort = params.get('sort') || '';
 
   useEffect(() => {
-    dispatch(listProducts({ keyword, pageNumber, sort }));
-  }, [dispatch, keyword, pageNumber, sort]);
+    dispatch(listProducts({ search, pageNumber, sort }));
+  }, [dispatch, params]);
 
   return (
     <>
-      {!keyword ? (
+      {!search ? (
         <ProductCarousel />
       ) : (
         <Link to='/' className='btn btn-light mb-3'>
@@ -56,7 +55,7 @@ const HomeScreen = () => {
               </Col>
             ))}
           </Row>
-          <Paginate pages={pages} page={page} keyword={keyword} sort={sort} />
+          <Paginate pages={pages} page={page} keyword={search} sort={sort} />
         </>
       )}
     </>
