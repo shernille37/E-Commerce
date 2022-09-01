@@ -25,6 +25,7 @@ import ProductEditScreen from './screens/admin/ProductEditScreen';
 import CheckOut from './screens/checkout/CheckOut';
 import OrderListScreen from './screens/admin/OrderListScreen';
 import AdminScreen from './screens/admin/AdminScreen';
+import Category from './components/Category';
 
 function App() {
   const [clientID, setClientID] = useState(null);

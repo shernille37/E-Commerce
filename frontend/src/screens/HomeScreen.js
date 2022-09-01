@@ -9,6 +9,7 @@ import { listProducts } from '../actions/productActions';
 import Paginate from '../components/utils/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import SortBox from '../components/utils/SortBox';
+import Category from '../components/Category';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const HomeScreen = () => {
           Go Back
         </Link>
       )}
+      <Category />
       <Row>
         <Col>
           <h1>Latest Products</h1>

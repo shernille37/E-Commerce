@@ -16,14 +16,14 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
-  const [search, setSearch] = useSearchParams();
+  const [search] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
 
   const user = useSelector((state) => state.user);
   const { authUser, loading, error } = user;
 
-  const redirect = search.get('redirect') ? search.get('redirect') : '/';
+  const redirect = search.get('redirect') || '/';
 
   useEffect(() => {
     if (authUser) {
