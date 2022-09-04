@@ -134,12 +134,20 @@ textarea {
   margin-bottom: 30px;
 }
 
+.category-icon {
+  font-size: 30px;
+}
+
 .swiper-slide img {
-  width: 80px;
+  width: 50px;
 }
 
 .swiper-slide:hover .card {
   background-color: var(--success);
+}
+
+.swiper-slide:hover .card-title,
+.swiper-slide:hover .category-icon {
   color: #fff;
 }
 
@@ -152,14 +160,14 @@ textarea {
 .slidePrev {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-60%);
   left: 0;
   z-index: 5;
 }
 .slideNext {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-60%);
   right: 0;
   z-index: 5;
 }

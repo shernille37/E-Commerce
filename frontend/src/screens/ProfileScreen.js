@@ -3,6 +3,7 @@ import { Form, Button, Row, Col, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import dateFormat from 'dateformat';
@@ -58,124 +59,192 @@ const ProfileScreen = () => {
     }
   };
 
-  return (
-    <Row>
-      <Col md={3}>
-        <h2>User Profile</h2>
-        {message && <Message variant='danger'>{message}</Message>}
-        {error && <Message variant='danger'>{error}</Message>}
-        {loadingUpdate && <Message variant='info'>Updating...</Message>}
-        {successUpdate && <Message variant='success'>Profile Updated</Message>}
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId='name'>
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type='name'
-              placeholder='Enter name'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group>
+  return authUser && authUser.isAdmin ? (
+    <FormContainer>
+      <h2>User Profile</h2>
+      {message && <Message variant='danger'>{message}</Message>}
+      {error && <Message variant='danger'>{error}</Message>}
+      {loadingUpdate && <Message variant='info'>Updating...</Message>}
+      {successUpdate && <Message variant='success'>Profile Updated</Message>}
+      <Form onSubmit={submitHandler}>
+        <Form.Group controlId='name'>
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type='name'
+            placeholder='Enter name'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          ></Form.Control>
+        </Form.Group>
 
-          <Form.Group controlId='email'>
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type='email'
-              placeholder='Enter email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group>
+        <Form.Group controlId='email'>
+          <Form.Label>Email Address</Form.Label>
+          <Form.Control
+            type='email'
+            placeholder='Enter email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          ></Form.Control>
+        </Form.Group>
 
-          <Form.Group controlId='password'>
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='Enter password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group>
+        <Form.Group controlId='password'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Enter password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          ></Form.Control>
+        </Form.Group>
 
-          <Form.Group controlId='confirmPassword'>
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='Confirm password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            ></Form.Control>
-          </Form.Group>
+        <Form.Group controlId='confirmPassword'>
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Confirm password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          ></Form.Control>
+        </Form.Group>
 
-          <Button className='mt-2' type='submit' variant='primary'>
-            Update
-          </Button>
-        </Form>
-      </Col>
-      <Col md={9}>
-        <h2>My Orders</h2>
-        {loadingOrder ? (
-          <Loader />
-        ) : orderError ? (
-          <Message variant={'danger'}>{orderError}</Message>
-        ) : myOrders.length === 0 ? (
-          <Message variant='info'>You don't have any orders</Message>
-        ) : (
-          <Table
-            striped
-            bordered
-            hover
-            responsive
-            className='table-sm text-center'
-          >
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>DATE OF ORDER</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {myOrders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{dateFormat(order.createdAt, 'mmm d, yyyy')}</td>
-                  <td>&euro;{order.priceInfo.totalPrice}</td>
-                  <td>
-                    {order.isPaid ? (
-                      dateFormat(order.paidAt, 'mmm d, yyyy')
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      dateFormat(order.deliveredAt, 'mmm d, yyyy')
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer to={`/order/${order._id}`}>
-                      <Button className='btn-sm' variant='light'>
-                        Details
-                      </Button>
-                    </LinkContainer>
-                  </td>
+        <Button className='mt-2' type='submit' variant='primary'>
+          Update
+        </Button>
+      </Form>
+    </FormContainer>
+  ) : (
+    <>
+      <Row>
+        <Col md={3}>
+          <h2>User Profile</h2>
+          {message && <Message variant='danger'>{message}</Message>}
+          {error && <Message variant='danger'>{error}</Message>}
+          {loadingUpdate && <Message variant='info'>Updating...</Message>}
+          {successUpdate && (
+            <Message variant='success'>Profile Updated</Message>
+          )}
+          <Form onSubmit={submitHandler}>
+            <Form.Group controlId='name'>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='email'>
+              <Form.Label>Email Address</Form.Label>
+              <Form.Control
+                type='email'
+                placeholder='Enter email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='password'>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Enter password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='confirmPassword'>
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Confirm password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              ></Form.Control>
+            </Form.Group>
+
+            <Button className='mt-2' type='submit' variant='primary'>
+              Update
+            </Button>
+          </Form>
+        </Col>
+
+        <Col md={9}>
+          <h2>My Orders</h2>
+          {loadingOrder ? (
+            <Loader />
+          ) : orderError ? (
+            <Message variant={'danger'}>{orderError}</Message>
+          ) : myOrders.length === 0 ? (
+            <Message variant='info'>You don't have any orders</Message>
+          ) : (
+            <Table
+              striped
+              bordered
+              hover
+              responsive
+              className='table-sm text-center'
+            >
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>DATE OF ORDER</th>
+                  <th>TOTAL</th>
+                  <th>PAID</th>
+                  <th>DELIVERED</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Col>
-    </Row>
+              </thead>
+              <tbody>
+                {myOrders.map((order) => (
+                  <tr key={order._id}>
+                    <td>{order._id}</td>
+                    <td>{dateFormat(order.createdAt, 'mmm d, yyyy')}</td>
+                    <td>&euro;{order.priceInfo.totalPrice}</td>
+                    <td>
+                      {order.isPaid ? (
+                        dateFormat(order.paidAt, 'mmm d, yyyy')
+                      ) : (
+                        <i
+                          className='fas fa-times'
+                          style={{ color: 'red' }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      {order.isDelivered ? (
+                        dateFormat(order.deliveredAt, 'mmm d, yyyy')
+                      ) : (
+                        <i
+                          className='fas fa-times'
+                          style={{ color: 'red' }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer to={`/order/${order._id}`}>
+                        <Button className='btn-sm' variant='light'>
+                          Details
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Col>
+      </Row>
+    </>
   );
 };
 

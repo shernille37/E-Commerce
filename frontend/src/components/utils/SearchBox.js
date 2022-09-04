@@ -5,16 +5,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 const SearchBox = () => {
   const [keyword, setKeyword] = useState('');
   const [params, setParams] = useSearchParams();
-
   const navigate = useNavigate();
+
+  const category = params.get('category') || '';
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (keyword.trim()) {
+    if (keyword.trim() && category) {
+      navigate(`/?search=${keyword}&category=${category}`);
+    } else if (keyword.trim()) {
       navigate(`/?search=${keyword}`);
-    } else {
-      navigate('/');
-    }
+    } else navigate('/');
     setKeyword('');
   };
 

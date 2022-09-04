@@ -6,14 +6,17 @@ import { LinkContainer } from 'react-router-bootstrap';
 const SortBox = () => {
   const [params] = useSearchParams();
   const search = params.get('search') || '';
+  const category = params.get('category') || '';
   const pageNumber = params.get('page') || 1;
 
   const [link, setLink] = useState('');
 
   useEffect(() => {
-    if (search) {
-      setLink(`/?search=${search}&page=${pageNumber}`);
-    } else setLink(`/?page=${pageNumber}`);
+    if (search && category) {
+      setLink(`/?search=${search}&category=${category}&page=${pageNumber}`);
+    } else if (search) setLink(`/?search=${search}&page=${pageNumber}`);
+    else if (category) setLink(`/?category=${category}&page=${pageNumber}`);
+    else setLink(`/?page=${pageNumber}`);
   }, [params]);
 
   return (

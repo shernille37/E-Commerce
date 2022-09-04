@@ -8,18 +8,37 @@ const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10;
   const page = Number(req.query.page) || 1;
   const sort = req.query.sort || '';
+  const search = req.query.search || '';
+  const category = req.query.category || '';
 
-  const search = req.query.search
-    ? {
-        name: {
-          $regex: req.query.search,
-          $options: 'i',
-        },
-      }
-    : {};
+  const options = {
+    name: {
+      $regex: search,
+      $options: 'i',
+    },
+    category: {
+      $regex: category,
+      $options: 'i',
+    },
+  };
 
-  const count = await Product.countDocuments({ ...search });
-  let products = await Product.find({ ...search })
+  const searchProduct =
+    search && category
+      ? {
+          ...options,
+        }
+      : search
+      ? {
+          name: options['name'],
+        }
+      : category
+      ? {
+          category: options['category'],
+        }
+      : {};
+
+  const count = await Product.countDocuments({ ...searchProduct });
+  let products = await Product.find({ ...searchProduct })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 

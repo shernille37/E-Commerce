@@ -53,7 +53,7 @@ const ProductListScreen = () => {
     if (!(authUser && authUser.isAdmin)) {
       navigate('/login');
     } else {
-      dispatch(listProducts({ search: '', pageNumber }));
+      dispatch(listProducts({}));
     }
   }, [dispatch, authUser, pageNumber, params]);
 
@@ -61,9 +61,9 @@ const ProductListScreen = () => {
     if (successCreate) {
       dispatch(resetCreateSuccess());
       navigate(`${product._id}/edit`);
-      dispatch(listProducts({ search: '', pageNumber }));
+      dispatch(listProducts({}));
     } else if (successDelete || successUpdate) {
-      dispatch(listProducts({ search: '', pageNumber }));
+      dispatch(listProducts({}));
     }
 
     if (successDelete || successUpdate) {

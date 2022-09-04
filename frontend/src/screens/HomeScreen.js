@@ -9,7 +9,7 @@ import { listProducts } from '../actions/productActions';
 import Paginate from '../components/utils/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import SortBox from '../components/utils/SortBox';
-import Category from '../components/Category';
+import Category from '../components/utils/Category';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -20,9 +20,10 @@ const HomeScreen = () => {
   const search = params.get('search') || '';
   const pageNumber = params.get('page') || 1;
   const sort = params.get('sort') || '';
+  const category = params.get('category') || '';
 
   useEffect(() => {
-    dispatch(listProducts({ search, pageNumber, sort }));
+    dispatch(listProducts({ search, pageNumber, sort, category }));
   }, [dispatch, params]);
 
   return (

@@ -3,10 +3,13 @@ import axios from 'axios';
 
 export const listProducts = createAsyncThunk(
   'GET_LIST_PRODUCTS',
-  async ({ search, pageNumber, sort }, { rejectWithValue }) => {
+  async (
+    { search = '', pageNumber = 1, sort = '', category = '' },
+    { rejectWithValue }
+  ) => {
     try {
       const { data } = await axios.get(
-        `/api/products?search=${search}&page=${pageNumber}&sort=${sort}`
+        `/api/products?search=${search}&page=${pageNumber}&sort=${sort}&category=${category}`
       );
       return data;
     } catch (error) {
@@ -66,6 +69,33 @@ export const createProduct = createAsyncThunk(
       };
 
       const { data } = await axios.post(`/api/products`, {}, config);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
+export const uploadProduct = createAsyncThunk(
+  'UPLOAD_PRODUCT',
+  async (formData, { rejectWithValue }) => {
+    const { token } = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post(`/api/upload`, formData, config);
       return data;
     } catch (error) {
       return rejectWithValue(

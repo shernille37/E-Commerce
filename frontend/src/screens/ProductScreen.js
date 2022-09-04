@@ -19,6 +19,7 @@ const ProductScreen = () => {
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [errorQty, setErrorQty] = useState(null);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -43,13 +44,19 @@ const ProductScreen = () => {
       setTimeout(() => dispatch(resetReviewSuccess()), 3000);
     }
     if (errorReview) {
-      setTimeout(() => dispatch(resetErrorReview()), 3000);
+      const timeout = setTimeout(() => dispatch(resetErrorReview()), 3000);
+      return () => clearTimeout(timeout);
     }
   }, [dispatch, successReview, errorReview]);
 
   const addToCartHandler = () => {
-    dispatch(addToCart({ id: product._id, qty }));
-    navigate(`/cart`);
+    if (qty > product.countInStock) {
+      setErrorQty('Qty exceeded the maximum count');
+    } else if (qty <= 0) setErrorQty('Qty exceeded the minimun count');
+    else {
+      dispatch(addToCart({ id: product._id, qty }));
+      navigate(`/cart`);
+    }
   };
 
   const createReviewHandler = (e) => {
@@ -98,6 +105,7 @@ const ProductScreen = () => {
             </Col>
 
             <Col md={3}>
+              {errorQty && <Message variant={'danger'}>{errorQty}</Message>}
               <Card>
                 <ListGroup variant='flush'>
                   <ListGroup.Item>
@@ -111,9 +119,11 @@ const ProductScreen = () => {
 
                   <ListGroup.Item>
                     <Row>
-                      <Col>Status:</Col>
+                      <Col>Qty in Stock:</Col>
                       <Col>
-                        {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
+                        {product.countInStock > 0
+                          ? `${product.countInStock}`
+                          : 'Out of Stock'}
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -124,18 +134,12 @@ const ProductScreen = () => {
                         <Col>Qty</Col>
                         <Col>
                           <Form.Control
-                            as='select'
+                            type='number'
                             value={qty}
+                            min={1}
+                            max={product.countInStock}
                             onChange={(e) => setQty(e.target.value)}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (qty) => (
-                                <option key={qty + 1} value={qty + 1}>
-                                  {qty + 1}
-                                </option>
-                              )
-                            )}
-                          </Form.Control>
+                          ></Form.Control>
                         </Col>
                       </Row>
                     </ListGroup.Item>

@@ -1,54 +1,57 @@
 import React from 'react';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Navigation, Pagination, A11y } from 'swiper';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Link } from 'react-router-dom';
-import { Image, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 
 const Category = () => {
   const categories = [
     {
       link: '?category=laptop',
-      src: '/images/icon-1.png',
+      icon: 'fa-solid fa-laptop',
       alt: 'Laptop',
     },
     {
       link: '?category=photography',
-      src: '/images/icon-3.png',
+      icon: 'fa-solid fa-camera',
       alt: 'Photography',
     },
     {
       link: '?category=mouse',
-      src: '/images/icon-4.png',
+      icon: 'fa-solid fa-computer-mouse',
       alt: 'Mouse',
     },
     {
       link: '?category=mobile',
-      src: '/images/icon-7.png',
+      icon: 'fa-solid fa-mobile',
       alt: 'Mobile',
     },
     {
       link: '?category=wearables',
-      src: '/images/icon-8.png',
+      icon: 'fa-solid fa-headphones',
       alt: 'Wearables',
+    },
+    {
+      link: '?category=gaming',
+      icon: 'fa-brands fa-playstation',
+      alt: 'Gaming',
     },
   ];
 
   return (
     <Swiper
-      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      modules={[Navigation, Pagination, A11y]}
       spaceBetween={10}
       navigation={{
         nextEl: '.slideNext',
         prevEl: '.slidePrev',
       }}
       pagination={{ clickable: true }}
-      loop={true}
       breakpoints={{
         500: {
           slidesPerView: 2,
@@ -57,7 +60,7 @@ const Category = () => {
           slidesPerView: 3,
         },
         1024: {
-          slidesPerView: 5,
+          slidesPerView: 6,
         },
       }}
     >
@@ -65,7 +68,7 @@ const Category = () => {
         <SwiperSlide key={i}>
           <Card className='pt-3 rounded'>
             <Link to={c.link}>
-              <Card.Img src={c.src} alt={c.alt} variant='top' />
+              <i className={`category-icon ${c.icon}`}></i>
             </Link>
             <Card.Body>
               <Link to={c.link}>

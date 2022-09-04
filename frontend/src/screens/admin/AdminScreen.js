@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Outlet, useLocation } from 'react-router-dom';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
 const AdminScreen = () => {
   const pathName = useLocation().pathname;
+  const navigate = useNavigate();
+
+  const authUser = useSelector((state) => state.user.authUser);
+
+  useEffect(() => {
+    if (!authUser) navigate('/');
+  }, [authUser]);
+
   return (
     <>
       <Breadcrumbs />

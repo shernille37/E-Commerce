@@ -26,12 +26,14 @@ const Header = () => {
         <Navbar.Collapse id='basic-navbar-nav'>
           <SearchBox />
           <Nav className='ml-auto'>
-            <LinkContainer to='/cart'>
-              <Nav.Link>
-                {' '}
-                <i className='fas fa-shopping-cart'></i> Cart
-              </Nav.Link>
-            </LinkContainer>
+            {(!authUser || (authUser && !authUser.isAdmin)) && (
+              <LinkContainer to='/cart'>
+                <Nav.Link>
+                  {' '}
+                  <i className='fas fa-shopping-cart'></i> Cart
+                </Nav.Link>
+              </LinkContainer>
+            )}
 
             {authUser ? (
               <NavDropdown title={authUser.name} id='username'>

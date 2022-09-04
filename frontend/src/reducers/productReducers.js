@@ -7,6 +7,7 @@ import {
   updateProduct,
   createProductReview,
   getTopProducts,
+  uploadProduct,
 } from '../actions/productActions';
 
 const productsInitialState = {
@@ -166,6 +167,23 @@ export const productDetailsReducer = createSlice({
       .addCase(updateProduct.rejected, (state, action) => {
         state.successUpdate = false;
         state.loadingUpdate = false;
+        state.error = action.payload;
+      })
+
+      // UPLOAD PRODUCT
+      .addCase(uploadProduct.pending, (state, action) => {
+        state.loadingUpload = true;
+        state.error = null;
+      })
+      .addCase(uploadProduct.fulfilled, (state, action) => {
+        state.loadingUpload = false;
+        state.product = {
+          ...state.product,
+          image: action.payload,
+        };
+      })
+      .addCase(uploadProduct.rejected, (state, action) => {
+        state.loadingUpload = false;
         state.error = action.payload;
       });
   },

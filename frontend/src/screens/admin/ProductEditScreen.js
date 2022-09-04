@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Modal } from 'react-bootstrap';
-import FormContainer from '../../components/FormContainer';
+
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import {
   listProductDetails,
   updateProduct,
+  uploadProduct,
 } from '../../actions/productActions';
 
 const ProductEditScreen = () => {
@@ -34,7 +35,7 @@ const ProductEditScreen = () => {
   const { authUser } = user;
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { product, loading, error } = productDetails;
+  const { product, loading, error, loadingUpload } = productDetails;
 
   useEffect(() => {
     if (!(authUser && authUser.isAdmin)) {
@@ -74,23 +75,8 @@ const ProductEditScreen = () => {
     const formData = new FormData();
 
     formData.append('img', file);
-    setUploading(true);
 
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-
-      const { data } = await axios.post('/api/upload', formData, config);
-
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-    }
+    dispatch(uploadProduct(formData));
   };
 
   return (
@@ -144,7 +130,7 @@ const ProductEditScreen = () => {
                   label='Choose File'
                   onChange={uploadFileHandler}
                 ></Form.Control>
-                {uploading && <Loader />}
+                {loadingUpload && <Loader />}
               </Form.Group>
 
               <Form.Group controlId='brand'>
@@ -170,11 +156,16 @@ const ProductEditScreen = () => {
               <Form.Group controlId='category'>
                 <Form.Label>Category</Form.Label>
                 <Form.Control
-                  type='text'
-                  placeholder='Enter category'
-                  value={category}
+                  as='select'
                   onChange={(e) => setCategory(e.target.value)}
-                ></Form.Control>
+                >
+                  <option value='laptop'>Laptop</option>
+                  <option value='photography'>Photography</option>
+                  <option value='mouse'>Mouse</option>
+                  <option value='mobile'>Mobile Devices</option>
+                  <option value='wearables'>Wearables</option>
+                  <option value='gaming'>Gaming</option>
+                </Form.Control>
               </Form.Group>
 
               <Form.Group controlId='description'>
