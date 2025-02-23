@@ -20,21 +20,6 @@ textarea {
   height: 150px !important;
 }
 
-.zoom-img-container {
-  position: relative;
-  z-index: 1;
-}
-
-.zoom-lens {
-  position: absolute;
-  z-index: 2;
-  height: 125px;
-  width: 125px;
-  border: 2px solid black;
-  background-repeat: no-repeat;
-  cursor: none;
-}
-
 /* carousel */
 .carousel-item-next,
 .carousel-item-prev,
@@ -78,7 +63,7 @@ textarea {
 .breadcrumb__item {
   background-color: white;
   color: #252525;
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   border-radius: 7px;
   letter-spacing: 1px;
   transition: all 0.3s ease;
