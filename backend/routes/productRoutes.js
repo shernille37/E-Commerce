@@ -9,6 +9,7 @@ import {
   getTopProducts,
 } from "../controllers/productController.js";
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
+import _isValidObjectId from "../middleware/isValidObjectId.js";
 
 const router = express.Router();
 
@@ -17,10 +18,12 @@ router.get("/top", getTopProducts);
 
 router
   .route("/:id")
-  .get(getProductById)
+  .get(_isValidObjectId, getProductById)
   .delete(protect, isAdmin, deleteProductById)
   .put(protect, isAdmin, updateProduct);
 
-router.route("/:id/reviews").post(protect, createProductReview);
+router
+  .route("/:id/reviews")
+  .post(protect, _isValidObjectId, createProductReview);
 
 export default router;

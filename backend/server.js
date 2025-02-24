@@ -3,12 +3,13 @@ import products from "./data/products.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
+
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 // import path from "path";
 // import cookieParser from "cookie-parser";
 // import userRoutes from "./routes/userRoutes.js";
 // import orderRoutes from "./routes/orderRoutes.js";
 // import uploadRoutes from "./routes/uploadRoutes.js";
-// import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
 const port = process.env.PORT || 5001;
@@ -50,8 +51,8 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// app.use(notFound);
-// app.use(errorHandler);
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () =>
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`)
