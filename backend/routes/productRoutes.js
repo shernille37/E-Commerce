@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import {
   getProducts,
   getProductById,
@@ -7,20 +7,20 @@ import {
   updateProduct,
   createProductReview,
   getTopProducts,
-} from '../controllers/productController.js';
-import { protect, isAdmin } from '../middleware/authMiddleware.js';
+} from "../controllers/productController.js";
+import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route('/').get(getProducts).post(protect, isAdmin, createProduct);
-router.get('/top', getTopProducts);
+router.route("/").get(getProducts).post(protect, isAdmin, createProduct);
+router.get("/top", getTopProducts);
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(getProductById)
   .delete(protect, isAdmin, deleteProductById)
   .put(protect, isAdmin, updateProduct);
 
-router.route('/:id/reviews').post(protect, createProductReview);
+router.route("/:id/reviews").post(protect, createProductReview);
 
 export default router;
