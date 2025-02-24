@@ -1,76 +1,65 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import morgan from 'morgan';
-import colors from 'colors';
-import path from 'path';
-
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-
-import connectDB from './config/db.js';
-import productRoutes from './routes/productRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';
-import uploadRoutes from './routes/uploadRoutes.js';
+import express from "express";
+import products from "./data/products.js";
+import dotenv from "dotenv";
+// import path from "path";
+// import cookieParser from "cookie-parser";
+// import connectDB from "./config/db.js";
+// import productRoutes from "./routes/productRoutes.js";
+// import userRoutes from "./routes/userRoutes.js";
+// import orderRoutes from "./routes/orderRoutes.js";
+// import uploadRoutes from "./routes/uploadRoutes.js";
+// import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
+const port = process.env.PORT || 5001;
 
-//Connect to Database
-connectDB();
-
-//Initialize Express
 const app = express();
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(cookieParser());
 
-app.use(express.json());
+// app.use("/api/products", productRoutes);
+// app.use("/api/users", userRoutes);
+// app.use("/api/orders", orderRoutes);
+// app.use("/api/upload", uploadRoutes);
 
-// Product Routes
-app.use('/api/products', productRoutes);
+// app.get("/api/config/paypal", (req, res) =>
+//   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
+// );
 
-// User Routes
-app.use('/api/users', userRoutes);
+// if (process.env.NODE_ENV === "production") {
+//   const __dirname = path.resolve();
+//   app.use("/uploads", express.static("/var/data/uploads"));
+//   app.use(express.static(path.join(__dirname, "/frontend/build")));
 
-// Order Routes
-app.use('/api/orders', orderRoutes);
+//   app.get("*", (req, res) =>
+//     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+//   );
+// } else {
+//   const __dirname = path.resolve();
+//   app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+//   app.get("/", (req, res) => {
+//     res.send("API is running....");
+//   });
+// }
 
-// UPLOAD ROUTE
-app.use('/api/upload', uploadRoutes);
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 
-// PAYPAL
-app.get('/api/config/paypal', (req, res) =>
-  res.send(process.env.PAYPAL_CLIENT_ID)
-);
+app.get("/api/products", (req, res) => {
+  res.json(products);
+});
 
-const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+app.get("/api/products/:id", (req, res) => {
+  const product = products.find((p) => p._id === req.params.id);
+  res.json(product);
+});
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/frontend/build')));
+// app.use(notFound);
+// app.use(errorHandler);
 
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
-  );
-} else {
-  app.get('/', (req, res) => {
-    res.send('API is Running');
-  });
-}
-
-//--Middlewares--
-
-// Not Found Error
-app.use(notFound);
-
-// Error Handler
-app.use(errorHandler);
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(
-  PORT,
-  console.log(
-    `Server Running in ${process.env.NODE_ENV} mode on port ${PORT}`.green.bold
-  )
+app.listen(port, () =>
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`)
 );
