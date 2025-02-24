@@ -1,21 +1,12 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { productsSlice, productDetailsSlice } from './reducers/productReducers';
-import { cartSlice } from './reducers/cartReducers';
-import { userSlice } from './reducers/userReducers';
-import { orderSlice } from './reducers/orderReducers';
+import { configureStore } from "@reduxjs/toolkit";
 
-const reducer = combineReducers({
-  productList: productsSlice,
-  productDetails: productDetailsSlice,
-  cart: cartSlice,
-  user: userSlice,
-  order: orderSlice,
-});
+import { apiSlice } from "./slices/apiSlice";
 
 export default configureStore({
-  reducer,
+  reducer: {
+    [apiSlice.reducerPath]: apiSlice.reducer,
+  },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+    getDefaultMiddleware().concat(apiSlice.middleware),
+  devTools: true,
 });
