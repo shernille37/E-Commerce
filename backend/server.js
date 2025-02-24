@@ -1,9 +1,9 @@
 import express from "express";
 import products from "./data/products.js";
 import dotenv from "dotenv";
+import connectDB from "./config/db.js";
 // import path from "path";
 // import cookieParser from "cookie-parser";
-// import connectDB from "./config/db.js";
 // import productRoutes from "./routes/productRoutes.js";
 // import userRoutes from "./routes/userRoutes.js";
 // import orderRoutes from "./routes/orderRoutes.js";
@@ -12,6 +12,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const port = process.env.PORT || 5001;
+
+connectDB();
 
 const app = express();
 
