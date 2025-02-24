@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,12 +17,19 @@ import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
-import products from "../products";
-
 const ProductScreen = () => {
+  const [product, setProduct] = useState({});
+
   const { id: productId } = useParams();
 
-  const product = products.find((p) => p._id === productId);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get(`/api/products/${productId}`);
+      setProduct(data);
+    };
+
+    fetchProduct();
+  }, [productId]);
 
   return (
     <>
