@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
-import asyncHandler from "../middleware/asyncHandler.js";
+import asyncHandler from "./asyncHandler.js";
 
 export const protect = asyncHandler(async (req, res, next) => {
   if (
