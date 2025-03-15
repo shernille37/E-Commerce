@@ -2,6 +2,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import { calcPrices } from "../utils/calcPrices.js";
+import Stripe from "stripe";
 // import { verifyPayPalPayment, checkIfNewTransaction } from "../utils/paypal.js";
 
 // @desc    Create new order
@@ -86,40 +87,55 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @desc    Update order to paid
 // @route   PUT /api/orders/:id/pay
 // @access  Private
-// const updateOrderToPaid = asyncHandler(async (req, res) => {
-//   // NOTE: here we need to verify the payment was made to PayPal before marking
-//   // the order as paid
-//   const { verified, value } = await verifyPayPalPayment(req.body.id);
-//   if (!verified) throw new Error("Payment not verified");
 
-//   // check if this transaction has been used before
-//   const isNewTransaction = await checkIfNewTransaction(Order, req.body.id);
-//   if (!isNewTransaction) throw new Error("Transaction has been used before");
+const updateOrderToPaid = asyncHandler(async (req, res) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-//   const order = await Order.findById(req.params.id);
+  const orderId = req.params.id;
+  const sessionId = req.query.session_id;
 
-//   if (order) {
-//     // check the correct amount was paid
-//     const paidCorrectAmount = order.totalPrice.toString() === value;
-//     if (!paidCorrectAmount) throw new Error("Incorrect amount paid");
+  if (!sessionId) throw new Error("Session ID is required");
 
-//     order.isPaid = true;
-//     order.paidAt = Date.now();
-//     order.paymentResult = {
-//       id: req.body.id,
-//       status: req.body.status,
-//       update_time: req.body.update_time,
-//       email_address: req.body.payer.email_address,
-//     };
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-//     const updatedOrder = await order.save();
+  // Check if the status of payment is paid
+  if (session.payment_status !== "paid")
+    throw new Error("Order has not correctly paid");
 
-//     res.json(updatedOrder);
-//   } else {
-//     res.status(404);
-//     throw new Error("Order not found");
-//   }
-// });
+  if (!(session.metadata.orderId && session.metadata.orderId === orderId))
+    throw new Error("Unauthorized access to session");
+
+  const order = await Order.findById(orderId);
+
+  if (order) {
+    if (order.isPaid) {
+      res.status(400);
+      throw new Error("Order has already been paid");
+    }
+
+    // Check that the correct amount is paid
+    const hasPaidCorrectAmount =
+      order.totalPrice === session.amount_total / 100;
+
+    if (!hasPaidCorrectAmount) throw new Error("Incorrect amount paid");
+
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    order.paymentResult = {
+      id: sessionId,
+      status: session.payment_status,
+      update_time: new Date(session.created * 1000).toLocaleDateString(),
+      email_address: session.customer_details.email,
+    };
+
+    const updatedOrder = order.save();
+
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
 
 // @desc    Update order to delivered
 // @route   GET /api/orders/:id/deliver
@@ -152,7 +168,7 @@ export {
   addOrderItems,
   getMyOrders,
   getOrderById,
-  // updateOrderToPaid,
+  updateOrderToPaid,
   updateOrderToDelivered,
   getOrders,
 };
