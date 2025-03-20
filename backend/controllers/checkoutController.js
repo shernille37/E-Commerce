@@ -8,7 +8,7 @@ import Order from "../models/orderModel.js";
 const createCheckoutSession = asyncHandler(async (req, res) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-  const { _id: orderId, orderItems, taxPrice, shippingPrice } = req.body;
+  const { _id: orderId, orderItems, shippingPrice } = req.body;
 
   const taxRate = await stripe.taxRates.create({
     display_name: "TAX",

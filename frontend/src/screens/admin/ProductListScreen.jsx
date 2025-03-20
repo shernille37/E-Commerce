@@ -61,8 +61,8 @@ const ProductListScreen = () => {
         </Col>
       </Row>
 
-      {/* {loadingCreate && <Loader />}
-      {loadingDelete && <Loader />} */}
+      {/* {loadingCreate && <Loader />} */}
+      {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (

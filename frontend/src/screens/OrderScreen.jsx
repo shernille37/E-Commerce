@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
-// import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import { useSelector } from "react-redux";
+
 import { toast } from "react-toastify";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -24,8 +22,6 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder] = usePayOrderMutation();
-
-  const { userInfo } = useSelector((state) => state.auth);
 
   const handlePayment = async () => {
     const stripe = await loadStripe(process.env.REACT_APP_STRIPE_CLIENT_KEY);
