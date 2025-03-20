@@ -43,48 +43,9 @@ const OrderScreen = () => {
     }
   };
 
-  // function onApprove(data, actions) {
-  //   return actions.order.capture().then(async function (details) {
-  //     try {
-  //       await payOrder({ orderId, details });
-  //       refetch();
-  //       toast.success("Order is paid");
-  //     } catch (err) {
-  //       toast.error(err?.data?.message || err.error);
-  //     }
-  //   });
-  // }
-
-  // TESTING ONLY! REMOVE BEFORE PRODUCTION
-  // async function onApproveTest() {
-  //   await payOrder({ orderId, details: { payer: {} } });
-  //   refetch();
-
-  //   toast.success('Order is paid');
-  // }
-
   function onError(err) {
     toast.error(err.message);
   }
-
-  // function createOrder(data, actions) {
-  //   return actions.order
-  //     .create({
-  //       purchase_units: [
-  //         {
-  //           amount: { value: order.totalPrice },
-  //         },
-  //       ],
-  //     })
-  //     .then((orderID) => {
-  //       return orderID;
-  //     });
-  // }
-
-  // const deliverHandler = async () => {
-  //   await deliverOrder(orderId);
-  //   refetch();
-  // };
 
   return isLoading ? (
     <Loader />
@@ -172,24 +133,28 @@ const OrderScreen = () => {
               <ListGroup.Item>
                 <h2>Order Summary</h2>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
                   <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
                   <Col>${order.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
                   <Col>${order.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
@@ -197,15 +162,17 @@ const OrderScreen = () => {
                 </Row>
               </ListGroup.Item>
 
-              <ListGroup.Item>
-                <Button
-                  type="button"
-                  className="btn-block"
-                  onClick={handlePayment}
-                >
-                  Pay Now
-                </Button>
-              </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn-block"
+                    onClick={handlePayment}
+                  >
+                    Pay Now
+                  </Button>
+                </ListGroup.Item>
+              )}
 
               {/* {loadingDeliver && <Loader />} */}
 
