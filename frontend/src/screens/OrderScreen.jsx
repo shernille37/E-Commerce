@@ -7,12 +7,16 @@ import Loader from "../components/Loader";
 import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
+  useDeliverOrderMutation,
 } from "../slices/ordersApiSlice";
 
 import { loadStripe } from "@stripe/stripe-js";
+import { useSelector } from "react-redux";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   const {
     data: order,
@@ -22,6 +26,8 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder] = usePayOrderMutation();
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
 
   const handlePayment = async () => {
     const stripe = await loadStripe(process.env.REACT_APP_STRIPE_CLIENT_KEY);
@@ -39,9 +45,14 @@ const OrderScreen = () => {
     }
   };
 
-  function onError(err) {
-    toast.error(err.message);
-  }
+  const handleDeliver = async () => {
+    try {
+      await deliverOrder({ orderId }).unwrap();
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   return isLoading ? (
     <Loader />
@@ -170,9 +181,9 @@ const OrderScreen = () => {
                 </ListGroup.Item>
               )}
 
-              {/* {loadingDeliver && <Loader />} */}
+              {loadingDeliver && <Loader />}
 
-              {/* {userInfo &&
+              {userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
                 !order.isDelivered && (
@@ -180,12 +191,12 @@ const OrderScreen = () => {
                     <Button
                       type="button"
                       className="btn btn-block"
-                      onClick={deliverHandler}
+                      onClick={handleDeliver}
                     >
                       Mark As Delivered
                     </Button>
                   </ListGroup.Item>
-                )} */}
+                )}
             </ListGroup>
           </Card>
         </Col>

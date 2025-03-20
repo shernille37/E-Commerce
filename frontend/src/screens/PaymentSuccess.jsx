@@ -18,7 +18,11 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     const updateToPay = async (orderId, sessionId) => {
-      const res = await updateOrderToPaid({ orderId, sessionId }).unwrap();
+      try {
+        await updateOrderToPaid({ orderId, sessionId }).unwrap();
+      } catch (err) {
+        console.error(err?.data?.message || err.error);
+      }
     };
 
     updateToPay(orderId, sessionId);
