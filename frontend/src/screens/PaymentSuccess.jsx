@@ -26,7 +26,9 @@ const PaymentSuccess = () => {
     };
 
     updateToPay(orderId, sessionId);
-  }, []);
+
+    return () => {};
+  }, [orderId, sessionId]);
 
   return isLoading ? (
     <Loader />

@@ -109,8 +109,9 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
   if (order) {
     if (order.isPaid) {
-      res.status(400);
-      throw new Error("Order has already been paid");
+      res.status(200);
+      res.json(order);
+      return;
     }
 
     order.isPaid = true;
@@ -122,7 +123,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       email_address: session.customer_details.email,
     };
 
-    const updatedOrder = order.save();
+    const updatedOrder = await order.save();
 
     res.json(updatedOrder);
   } else {
