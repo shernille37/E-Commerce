@@ -22,6 +22,7 @@ import {
 } from "../slices/productApiSlice";
 import { addToCart } from "../slices/cartSlice";
 import { toast } from "react-toastify";
+import ZoomImage from "../components/ZoomImage";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -84,7 +85,7 @@ const ProductScreen = () => {
           {/* <Meta title={product.name} description={product.description} /> */}
           <Row>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
+              <ZoomImage img={product.image} alt={product.name} />
             </Col>
             <Col md={3}>
               <ListGroup variant="flush">

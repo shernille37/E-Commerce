@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Image } from 'react-bootstrap';
+import React, { useRef } from "react";
+import { Image } from "react-bootstrap";
 
 const ZoomImage = ({ img, alt }) => {
   const imageContainer = useRef(null);
@@ -12,7 +12,7 @@ const ZoomImage = ({ img, alt }) => {
     const imageWidth = image.current.clientWidth;
     const imageHeight = image.current.clientHeight;
 
-    lens.current.style.display = 'block';
+    lens.current.style.display = "block";
     lens.current.style.backgroundImage = `url(${img})`;
 
     lens.current.style.backgroundSize = `${imageWidth * ratio}px ${
@@ -54,7 +54,7 @@ const ZoomImage = ({ img, alt }) => {
   };
 
   const removeLens = () => {
-    lens.current.style.display = 'none';
+    lens.current.style.display = "none";
   };
 
   const getCursor = () => {
@@ -71,16 +71,16 @@ const ZoomImage = ({ img, alt }) => {
 
   return (
     <div
-      className='zoom-img-container'
+      className="zoom-img-container"
       ref={imageContainer}
       onMouseOver={imageZoom}
       onMouseLeave={removeLens}
     >
       <div
-        className='zoom-lens'
+        className="zoom-lens"
         onMouseMove={moveLens}
         ref={lens}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
       ></div>
       <Image ref={image} src={img} alt={alt} fluid onMouseMove={moveLens} />
     </div>
