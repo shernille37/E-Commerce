@@ -113,12 +113,6 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       throw new Error("Order has already been paid");
     }
 
-    // Check that the correct amount is paid
-    const hasPaidCorrectAmount =
-      order.totalPrice === session.amount_total / 100;
-
-    if (!hasPaidCorrectAmount) throw new Error("Incorrect amount paid");
-
     order.isPaid = true;
     order.paidAt = Date.now();
     order.paymentResult = {

@@ -5,10 +5,11 @@ const initialState = {
   cart: localStorage.getItem("cart")
     ? {
         ...JSON.parse(localStorage.getItem("cart")).cart,
-        itemsPrice: JSON.parse(localStorage.getItem("cart")).itemsPrice,
-        shippingPrice: JSON.parse(localStorage.getItem("cart")).shippingPrice,
-        taxPrice: JSON.parse(localStorage.getItem("cart")).taxPrice,
-        totalPrice: JSON.parse(localStorage.getItem("cart")).totalPrice,
+        itemsPrice: JSON.parse(localStorage.getItem("cart")).cart.itemsPrice,
+        shippingPrice: JSON.parse(localStorage.getItem("cart")).cart
+          .shippingPrice,
+        taxPrice: JSON.parse(localStorage.getItem("cart")).cart.taxPrice,
+        totalPrice: JSON.parse(localStorage.getItem("cart")).cart.totalPrice,
       }
     : { cartItems: [], shippingAddress: {}, paymentMethod: "Card" },
 
