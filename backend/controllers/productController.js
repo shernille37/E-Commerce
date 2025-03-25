@@ -1,5 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from "../models/productModel.js";
+import cloudinary from "../config/cloudinary.js";
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -45,20 +46,44 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  const product = new Product({
-    name: "Sample name",
-    price: 0,
-    user: req.user._id,
-    image: "/images/sample.jpg",
-    brand: "Sample brand",
-    category: "Sample category",
-    countInStock: 0,
-    numReviews: 0,
-    description: "Sample description",
-  });
+  const { name, price, description, brand, category, countInStock } = req.body;
 
-  const createdProduct = await product.save();
-  res.status(201).json(createdProduct);
+  if (!req.file) {
+    throw new Error("Image is required");
+  }
+
+  const image = req.file;
+
+  if (!image.mimetype.startsWith("image")) {
+    res.status(400);
+    throw new Error("Please insert a valid image");
+  }
+
+  const upload = cloudinary.uploader.upload_stream(
+    { folder: "samples/ecommerce" },
+    async (error, resUpload) => {
+      if (error) {
+        res.status(500);
+        throw new Error("Cloudinary upload failed");
+      }
+
+      const product = new Product({
+        name,
+        price,
+        user: req.user._id,
+        image: resUpload.secure_url,
+        brand,
+        category,
+        countInStock,
+        description,
+      });
+
+      const createdProduct = await product.save();
+      res.status(201).json(createdProduct);
+    }
+  );
+
+  upload.end(req.file.buffer);
 });
 
 // @desc    Update a product
@@ -94,6 +119,18 @@ const deleteProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
+    // Delete image from cloudinary
+    const imageUrl = product.image;
+    const publicId = imageUrl.split("/").pop().split(".")[0];
+
+    await cloudinary.uploader.destroy(
+      `samples/ecommerce/${publicId}`,
+      (error, resDelete) => {
+        if (error) throw new Error("Cloudinary delete error");
+      }
+    );
+
+    // Delete product from Database
     await Product.deleteOne({ _id: product._id });
     res.json({ message: "Product removed" });
   } else {

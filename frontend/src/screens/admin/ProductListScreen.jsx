@@ -7,7 +7,6 @@ import Loader from "../../components/Loader";
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
-  useCreateProductMutation,
 } from "../../slices/productApiSlice";
 import { toast } from "react-toastify";
 
@@ -35,18 +34,8 @@ const ProductListScreen = () => {
     }
   };
 
-  const [createProduct, { isLoading: loadingCreate }] =
-    useCreateProductMutation();
-
-  const createProductHandler = async () => {
-    if (window.confirm("Are you sure you want to create a new product?")) {
-      try {
-        const createdProduct = await createProduct().unwrap();
-        navigate(`/admin/product/${createdProduct._id}/edit`);
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
-    }
+  const createProductHandler = () => {
+    navigate("/admin/product/add");
   };
 
   return (
