@@ -70,8 +70,7 @@ export const {
   useGetProductDetailsQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
-  // useUploadProductImageMutation,
   useDeleteProductMutation,
   useCreateReviewMutation,
-  // useGetTopProductsQuery,
+  useGetTopProductsQuery,
 } = productsApiSlice;
