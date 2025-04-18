@@ -1,19 +1,12 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Card,
-  Button,
-  Form,
-} from "react-bootstrap";
+import { Row, Col, ListGroup, Card, Button, Form } from "react-bootstrap";
 
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -82,7 +75,7 @@ const ProductScreen = () => {
         </Message>
       ) : (
         <>
-          {/* <Meta title={product.name} description={product.description} /> */}
+          <Meta title={product.name} description={product.description} />
           <Row>
             <Col md={6}>
               <ZoomImage img={product.image} alt={product.name} />

@@ -24,7 +24,7 @@ router
   .route("/:id")
   .get(_isValidObjectId, getProductById)
   .delete(protect, isAdmin, deleteProductById)
-  .put(protect, isAdmin, updateProduct);
+  .put(protect, isAdmin, upload.single("image"), updateProduct);
 
 router
   .route("/:id/reviews")

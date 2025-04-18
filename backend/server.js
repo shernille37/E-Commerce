@@ -1,5 +1,4 @@
 import express from "express";
-import products from "./data/products.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -27,8 +26,6 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/checkout", checkoutRoutes);
-
-// app.use("/api/upload", uploadRoutes);
 
 // if (process.env.NODE_ENV === "production") {
 //   const __dirname = path.resolve();

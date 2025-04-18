@@ -1,13 +1,17 @@
-import { Form } from "react-router-dom";
 import { PRODUCTS_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 export const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: () => ({
-        url: PRODUCTS_URL,
+      query: ({ keyword, pageNumber }) => ({
+        url: `${PRODUCTS_URL}`,
+        params: {
+          pageNumber,
+          keyword,
+        },
       }),
+
       keepUnusedDataFor: 5,
       providesTags: ["Products"],
     }),
@@ -36,11 +40,22 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       },
     }),
     updateProduct: builder.mutation({
-      query: (data) => ({
-        url: `${PRODUCTS_URL}/${data.productId}`,
-        method: "PUT",
-        body: data,
-      }),
+      query: (data) => {
+        console.log(data);
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("price", data.price);
+        formData.append("image", data.image);
+        formData.append("brand", data.brand);
+        formData.append("category", data.category);
+        formData.append("description", data.description);
+        formData.append("countInStock", data.countInStock);
+        return {
+          url: `${PRODUCTS_URL}/${data.productId}`,
+          method: "PUT",
+          body: formData,
+        };
+      },
       invalidatesTags: ["Products"],
     }),
     deleteProduct: builder.mutation({

@@ -28,16 +28,25 @@ const ProductEditScreen = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
+  useEffect(() => {
+    if (product) {
+      setName(product.name);
+      setPrice(product.price);
+      setBrand(product.brand);
+      setCategory(product.category);
+      setCountInStock(product.countInStock);
+      setDescription(product.description);
+    }
+  }, [product]);
+
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
-
-  // const [uploadProductImage, { isLoading: loadingUpload }] =
-  //   useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
     try {
       await updateProduct({
         productId,
@@ -48,7 +57,8 @@ const ProductEditScreen = () => {
         category,
         description,
         countInStock,
-      }).unwrap(); // NOTE: here we need to unwrap the Promise to catch any rejection in our catch block
+      }).unwrap();
+
       toast.success("Product updated");
 
       navigate("/admin/productlist");
@@ -56,30 +66,17 @@ const ProductEditScreen = () => {
       toast.error(err?.data?.message || err.error);
     }
   };
+  const uploadFileHandler = async (e) => {
+    const imageFile = e.target.files[0];
 
-  useEffect(() => {
-    if (product) {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
+    if (!imageFile.type.startsWith("image")) {
+      toast.error("Please select a valid image");
+      setImage("");
+      return;
     }
-  }, [product]);
 
-  // const uploadFileHandler = async (e) => {
-  //   const formData = new FormData();
-  //   formData.append("image", e.target.files[0]);
-  //   try {
-  //     const res = await uploadProductImage(formData).unwrap();
-  //     toast.success(res.message);
-  //     setImage(res.image);
-  //   } catch (err) {
-  //     toast.error(err?.data?.message || err.error);
-  //   }
-  // };
+    setImage(imageFile);
+  };
 
   return (
     <>
@@ -100,7 +97,7 @@ const ProductEditScreen = () => {
               <Form.Control
                 type="name"
                 placeholder="Enter name"
-                value={name}
+                defaultValue={product.name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -110,7 +107,7 @@ const ProductEditScreen = () => {
               <Form.Control
                 type="number"
                 placeholder="Enter price"
-                value={price}
+                defaultValue={product.price}
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -120,15 +117,14 @@ const ProductEditScreen = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter image url"
-                value={image}
+                defaultValue={product.image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.Control
                 label="Choose File"
-                // onChange={uploadFileHandler}
+                onChange={uploadFileHandler}
                 type="file"
               ></Form.Control>
-              {/* {loadingUpload && <Loader />} */}
             </Form.Group>
 
             <Form.Group controlId="brand">
@@ -136,7 +132,7 @@ const ProductEditScreen = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter brand"
-                value={brand}
+                defaultValue={product.brand}
                 onChange={(e) => setBrand(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -146,7 +142,7 @@ const ProductEditScreen = () => {
               <Form.Control
                 type="number"
                 placeholder="Enter countInStock"
-                value={countInStock}
+                defaultValue={product.countInStock}
                 onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -156,7 +152,7 @@ const ProductEditScreen = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter category"
-                value={category}
+                defaultValue={product.category}
                 onChange={(e) => setCategory(e.target.value)}
               ></Form.Control>
             </Form.Group>
@@ -164,9 +160,10 @@ const ProductEditScreen = () => {
             <Form.Group controlId="description">
               <Form.Label>Description</Form.Label>
               <Form.Control
-                type="text"
+                as="textarea"
+                rows={5}
                 placeholder="Enter description"
-                value={description}
+                defaultValue={product.description}
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>

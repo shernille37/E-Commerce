@@ -6,27 +6,26 @@ import cloudinary from "../config/cloudinary.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  // const pageSize = process.env.PAGINATION_LIMIT;
-  // const page = Number(req.query.pageNumber) || 1;
+  const pageSize = process.env.PAGINATION_LIMIT || 2;
+  const page = Number(req.query.pageNumber) || 1;
+  const keywordParam = req.query.keyword;
 
-  // const keyword = req.query.keyword
-  //   ? {
-  //       name: {
-  //         $regex: req.query.keyword,
-  //         $options: "i",
-  //       },
-  //     }
-  //   : {};
+  const keyword =
+    keywordParam && keywordParam !== "null" && keywordParam !== "undefined"
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: "i",
+          },
+        }
+      : {};
 
-  // const count = await Product.countDocuments({ ...keyword });
-  // const products = await Product.find({ ...keyword })
-  //   .limit(pageSize)
-  //   .skip(pageSize * (page - 1));
+  const count = await Product.countDocuments({ ...keyword });
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
 
-  const products = await Product.find({});
-
-  res.json(products);
-  // res.json({ products, page, pages: Math.ceil(count / pageSize) });
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Fetch single product
@@ -90,25 +89,42 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body;
+  const { name, price, description, brand, category, countInStock } = req.body;
 
   const product = await Product.findById(req.params.id);
 
-  if (product) {
-    product.name = name;
-    product.price = price;
-    product.description = description;
-    product.image = image;
-    product.brand = brand;
-    product.category = category;
-    product.countInStock = countInStock;
-
-    const updatedProduct = await product.save();
-    res.json(updatedProduct);
-  } else {
+  if (!product) {
     res.status(404);
     throw new Error("Product not found");
+  }
+  product.name = name;
+  product.price = price;
+  product.description = description;
+  product.brand = brand;
+  product.category = category;
+  product.countInStock = countInStock;
+
+  // If a file is uploaded
+  if (req.file) {
+    const upload = cloudinary.uploader.upload_stream(
+      { folder: "samples/ecommerce" },
+      async (error, resUpload) => {
+        if (error) {
+          res.status(500);
+          throw new Error("Cloudinary upload failed");
+        }
+
+        product.image = resUpload.secure_url;
+
+        const updatedProduct = await product.save();
+        res.json(updatedProduct);
+      }
+    );
+
+    upload.end(req.file.buffer);
+  } else {
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
   }
 });
 

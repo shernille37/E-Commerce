@@ -1,6 +1,7 @@
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import Paginate from "../../components/Paginate";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 // import Paginate from "../../components/Paginate";
@@ -11,13 +12,13 @@ import {
 import { toast } from "react-toastify";
 
 const ProductListScreen = () => {
-  const { pageNumber } = useParams();
+  const [searhParams] = useSearchParams();
 
-  // const { data, isLoading, error, refetch } = useGetProductsQuery({
-  //   pageNumber,
-  // });
+  const page = searhParams.get("page");
 
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const { data, isLoading, error, refetch } = useGetProductsQuery({
+    pageNumber: page,
+  });
   const navigate = useNavigate();
 
   const [deleteProduct, { isLoading: loadingDelete }] =
@@ -56,7 +57,9 @@ const ProductListScreen = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error.data.message}</Message>
+        <Message variant="danger">
+          {error?.data?.message || error.error}
+        </Message>
       ) : (
         <>
           <Table striped bordered hover responsive className="table-sm">
@@ -71,7 +74,7 @@ const ProductListScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {data.products.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
@@ -99,7 +102,7 @@ const ProductListScreen = () => {
               ))}
             </tbody>
           </Table>
-          {/* <Paginate pages={data.pages} page={data.page} isAdmin={true} /> */}
+          <Paginate pages={data.pages} page={data.page} isAdmin={true} />
         </>
       )}
     </>

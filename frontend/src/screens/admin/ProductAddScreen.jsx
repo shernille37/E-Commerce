@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
-import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import FormContainer from "../../components/FormContainer";
 import { toast } from "react-toastify";
@@ -133,7 +132,7 @@ const ProductAddScreen = () => {
           </Form.Group>
 
           <Button type="submit" variant="primary" style={{ marginTop: "1rem" }}>
-            Update
+            Add Product
           </Button>
         </Form>
       </FormContainer>
