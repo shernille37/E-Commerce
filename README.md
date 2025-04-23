@@ -19,8 +19,8 @@
 ## Usage
 
 - Create a MongoDB database and obtain your `MongoDB URI` - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
-- Create a Stripe account and obtain your `Client ID and SecretID` - [Stripe](https://developer.paypal.com/)
-- Create a Cloudinary account and obtain you `API Key and API Secret` - [Cloudinary]
+- Create a Stripe account and obtain your `Client ID and SecretID` - [Stripe](https://stripe.com/)
+- Create a Cloudinary account and obtain you `API Key and API Secret` - [Cloudinary](https://cloudinary.com)
 
 Add a `.env` file in the root and add the following
 
