@@ -22,7 +22,7 @@
 - Create a Stripe account and obtain your `Client ID and SecretID` - [Stripe](https://stripe.com/)
 - Create a Cloudinary account and obtain you `API Key and API Secret` - [Cloudinary](https://cloudinary.com)
 
-Add a `.env` file in the root and add the following
+Add a `.env` file in the `frontend/` and add the following
 
 ```
 NODE_ENV=development
