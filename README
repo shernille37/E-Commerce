@@ -1,5 +1,16 @@
-TODOS after Project
+# ProShop E-Commerce Platform
 
-• Encypt Data in the Local Storage
-• Improve Register Feature: If we register we do not want to instantly log in the user, instead we just return a message saying that the user is registered and the user needs to Login manually in the Login Screen
-• CREATE A MODAL AND NOT AN ALERT WHEN DELETING A USER
+## Features
+
+- Shopping Cart
+- Product reviews and ratings
+- Product pagination
+- Product search feature
+- User profile with orders
+- Admin product management
+- Admin user management
+- Admin Order details page
+- Checkout process (shipping, payment method, etc)
+- Payment with Stripe
+- Database seeder (products & users)
+
