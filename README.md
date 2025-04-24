@@ -46,7 +46,7 @@ REACT_APP_STRIPE_CLIENT_KEY= YOUR STRIPE CLIENT KEY
 
 - You can generate the `JWT_SECRET` with the following command:
 ```bash
-  openssl rand -base64 32
+openssl rand -base64 32
 ```
 
 ### Install Dependencies (frontend & backend)
