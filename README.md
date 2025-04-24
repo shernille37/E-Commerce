@@ -33,9 +33,9 @@
 
 ## Usage
 
-- Create a MongoDB database and obtain your `MongoDB URI` - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
-- Create a Stripe account and obtain your `Client ID and SecretID` - [Stripe](https://stripe.com/)
-- Create a Cloudinary account and obtain you `API Key and API Secret` - [Cloudinary](https://cloudinary.com)
+- Create a [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) database and obtain your `MongoDB URI` - 
+- Create a [Stripe](https://stripe.com/) account and obtain your `Client ID and SecretID`
+- Create a [Cloudinary](https://cloudinary.com) account and obtain you `API Key and API Secret`
 
 Add a `.env` file in the `frontend/` and add the following
 
