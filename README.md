@@ -31,7 +31,7 @@ MONGO_URI= YOUR MONGO URI
 JWT_SECRET= YOUR JWT SECRET
 STRIPE_SECRET_KEY= YOUR STRIPE SECRET KEY
 CLIENT_URL=http://localhost:3000
-SERVER_URL=http://localhost:5000
+SERVER_URL=http://localhost:8000
 CLOUDINARY_NAME= YOUR CLOUDINARY NAME
 CLOUDINARY_API_KEY= YOUR CLOUDINARY API KEY
 CLOUDINARY_API_SECRET= YOUR CLOUDINARY API SECRET
@@ -61,7 +61,7 @@ npm install
 
 ```
 
-# Run frontend (:3000) & backend (:5000)
+# Run frontend (:3000) & backend (:8000)
 npm run dev
 
 # Run backend only
@@ -87,6 +87,12 @@ npm run data:import
 # Destroy data
 npm run data:destroy
 ```
+
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 
 
