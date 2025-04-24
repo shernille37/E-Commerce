@@ -15,6 +15,16 @@
 - Payment with Stripe
 - Database seeder (products & users)
 
+## Technologies Used
+<p>
+  <a href="#"><img alt="React" src="https://img.shields.io/badge/React-20232a.svg?logo=react&logoColor=%2361DAFB"></a>
+  <a href="#"><img alt="Bootstrap" src="https://img.shields.io/badge/Bootstrap-007BFF.svg?logo=bootstrap&logoColor=%2361DAFB"></a>
+  <a href="#"><img alt="Express.js" src="https://img.shields.io/badge/Express.js-404d59.svg?logo=express&logoColor=white"></a>
+  <a href="#"><img alt="MongoDB" src ="https://img.shields.io/badge/MongoDB-4ea94b.svg?logo=mongodb&logoColor=white"></a>
+  <a href="#"><img alt="Cloudinary" src ="https://img.shields.io/badge/Cloudinary-00F.svg?logo=mongodb&logoColor=white"></a>
+  
+</p>
+
 
 ## Usage
 
