@@ -1,5 +1,7 @@
 # ProShop E-Commerce Platform
 
+<img src="./frontend/src/assets/screen.png">
+
 ## Features
 
 - Shopping Cart
