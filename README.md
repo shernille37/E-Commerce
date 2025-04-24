@@ -1,5 +1,7 @@
 # ProShop E-Commerce Platform
 
+> A full stack web application that lets you browse and purchase a variety of products
+
 <img src="./frontend/src/assets/screen.png">
 
 ## Features
