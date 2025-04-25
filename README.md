@@ -37,7 +37,7 @@
 - Create a [Stripe](https://stripe.com/) account and obtain your `Client ID and SecretID`
 - Create a [Cloudinary](https://cloudinary.com) account and obtain you `API Key and API Secret`
 
-Add a `.env` file in the `frontend/` and add the following
+Add a `.env` file in the `root` and add the following
 
 ```
 NODE_ENV=development
@@ -54,7 +54,7 @@ PAGINATION_LIMIT= YOUR PAGINATION LIMIT
 
 ```
 
-Add a `.env` file in the root and add the following
+Add a `.env` file in the `frontend/` and add the following
 ```
 REACT_APP_STRIPE_CLIENT_KEY= YOUR STRIPE CLIENT KEY
 ```
